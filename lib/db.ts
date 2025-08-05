@@ -157,4 +157,20 @@ export async function setupDatabase() {
   }
 }
 
+export async function getUserTokens(email: string) {
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      "SELECT access_token, refresh_token FROM users WHERE email = $1",
+      [email]
+    );
+    client.release();
+
+    return result.rows.length > 0 ? result.rows[0] : null;
+  } catch (error) {
+    console.error("Error getting user tokens:", error);
+    return null;
+  }
+}
+
 export default pool;
