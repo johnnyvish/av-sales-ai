@@ -1,52 +1,1272 @@
 [
   {
     "sku": "AC-MV-41",
-    "name": "4K HDMI Multiview/Tiling Processor",
+    "name": "4K HDMI Multiview/Tiling processor with four inputs and one output, de-embedded audio, and loop-outs for each input",
     "brand": "AVPro Edge",
     "category": "Multiview Processor",
     "description": "4K HDMI Multiview/Tiling processor with four inputs and one output, de-embedded audio, and loop-outs for each input",
     "dealer_price": 1098.9,
     "msrp": 2239,
-    "status": "active"
+    "status": ""
   },
   {
-    "sku": "AC-MX-44",
-    "name": "4K HDMI 4x4 Matrix Switch",
+    "sku": "AC-FRESCO-CAP-4",
+    "name": "1x4 Video Wall Processor with balanced audio extraction and HDMI loop out for cascading or larger walls; 4K60 4:4:4 support; Universal Scaler",
     "brand": "AVPro Edge",
-    "category": "Matrix Switch",
-    "description": "4K HDMI 4x4 Matrix Switch with 18Gbps bandwidth, supports 4K60 4:4:4, HDCP 2.2",
-    "dealer_price": 1209.0,
-    "msrp": 2689,
-    "status": "active"
+    "category": "Video Wall Processor",
+    "description": "1x4 Video Wall Processor with balanced audio extraction and HDMI loop out for cascading or larger walls; 4K60 4:4:4 support; Universal Scaler",
+    "dealer_price": 988.9,
+    "msrp": 2199,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-PC",
+    "name": "Software developed specifically for the Fresco 4 & 9 allows installers to build custom video walls of any size, from a standard 2x2 to a mosaic wall with different types and sizes of displays.",
+    "brand": "AVPro Edge",
+    "category": "Software",
+    "description": "Software developed specifically for the Fresco 4 & 9 allows installers to build custom video walls of any size, from a standard 2x2 to a mosaic wall with different types and sizes of displays.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-2-KIT",
+    "name": "USB 2.0 Point to Point Extender Kit over CAT5e--480mbps.",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "USB 2.0 Point to Point Extender Kit over CAT5e--480mbps.",
+    "dealer_price": 361.9,
+    "msrp": 809,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-3-KIT",
+    "name": "100-meter extension kit for USB 3.2 Gen 1 with a USB-C host and a four USB-A port hub connected via category cable",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "100-meter extension kit for USB 3.2 Gen 1 with a USB-C host and a four USB-A port hub connected via category cable",
+    "dealer_price": 471.9,
+    "msrp": 1049,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX40-444-KIT",
+    "name": "HDBaseT (CAT6) Extender Kit.  ICT 18G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR.  ICT for full HDR/HDMI Pass-Through.  Full HDR, 4K60 4:4:4.",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit.  ICT 18G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR.  ICT for full HDR/HDMI Pass-Through.  Full HDR, 4K60 4:4:4.",
+    "dealer_price": 504.9,
+    "msrp": 1129,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX40-444-KIT-W",
+    "name": "Weatherproof HDBaseT (CAT6) Extender Kit.  ICT 18G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR.  ICT for full HDR/HDMI Pass-Through.  Full HDR, 4K60 4:4:4.",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "Weatherproof HDBaseT (CAT6) Extender Kit.  ICT 18G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR.  ICT for full HDR/HDMI Pass-Through.  Full HDR, 4K60 4:4:4.",
+    "dealer_price": 599.9,
+    "msrp": 1339,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX40-444-PLUS-KIT",
+    "name": "HDBaseT (CAT6) Extender Kit.  ICT 18G, 40m 4K (70m HD) Extender with I-Pass, Bi-Directional Power, RS232, IR - ICT for full HDR/HDMI Pass-Through. Full HDR, 4K60 4:4:4.  PLUS  - ARC & Selectable Host/Device USB 2.0 (KVM/PTZ)",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit.  ICT 18G, 40m 4K (70m HD) Extender with I-Pass, Bi-Directional Power, RS232, IR - ICT for full HDR/HDMI Pass-Through. Full HDR, 4K60 4:4:4.  PLUS  - ARC & Selectable Host/Device USB 2.0 (KVM/PTZ)",
+    "dealer_price": 757.9,
+    "msrp": 1689,
+    "status": ""
   },
   {
     "sku": "AC-EX70-444-KIT",
-    "name": "HDBaseT Extender Kit",
+    "name": "HDBaseT (CAT6) Extender Kit.  ICT 18G, 70m 4K (100m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR and Ethernet.  ICT for full HDR/HDMI Pass-Through.  Full HDR, 4K60 4:4:4.  Features Long Range mode for 150m 1080P transmission",
     "brand": "AVPro Edge",
-    "category": "HDBaseT Extender",
-    "description": "HDBaseT Extender Kit extends 4K HDMI up to 70 meters over single CAT cable",
-    "dealer_price": 637.0,
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit.  ICT 18G, 70m 4K (100m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR and Ethernet.  ICT for full HDR/HDMI Pass-Through.  Full HDR, 4K60 4:4:4.  Features Long Range mode for 150m 1080P transmission",
+    "dealer_price": 636.9,
     "msrp": 1419,
-    "status": "active"
+    "status": ""
   },
   {
-    "sku": "AC-PSU-48V-EX70",
-    "name": "48V Power Supply",
+    "sku": "AC-EX70-UHD-KIT",
+    "name": "HDBaseT (CAT6) Extender Kit.  10.2G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR.  4K60 4:2:0 Max, HDR/HLG: 4K30 4:2:0 12 BIT, 4K30 4:2:2 12 BIT, Dolby Vision 30 FPS",
     "brand": "AVPro Edge",
-    "category": "Power Supply",
-    "description": "48V DC Power Supply for HDBaseT extenders and matrix switches",
-    "dealer_price": 119.0,
-    "msrp": 265,
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit.  10.2G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR.  4K60 4:2:0 Max, HDR/HLG: 4K30 4:2:0 12 BIT, 4K30 4:2:2 12 BIT, Dolby Vision 30 FPS",
+    "dealer_price": 339.9,
+    "msrp": 759,
+    "status": ""
+  },
+  {
+    "sku": "AC-MV-41",
+    "name": "4K HDMI Multiview/Tiling processor",
+    "brand": "AVPro Edge",
+    "category": "Multiview Processor",
+    "description": "4K HDMI Multiview/Tiling processor with four inputs and one output, de-embedded audio, and loop-outs for each input",
+    "dealer_price": 1098.9,
+    "msrp": 2239.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-CAP-4",
+    "name": "1x4 Video Wall Processor",
+    "brand": "AVPro Edge",
+    "category": "Video Wall Processor",
+    "description": "1x4 Video Wall Processor with balanced audio extraction and HDMI loop out for cascading or larger walls; 4K60 4:4:4 support; Universal Scaler",
+    "dealer_price": 988.9,
+    "msrp": 2199.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-PC",
+    "name": "Fresco Software",
+    "brand": "AVPro Edge",
+    "category": "Software",
+    "description": "Software developed specifically for the Fresco 4 & 9 allows installers to build custom video walls of any size, from a standard 2x2 to a mosaic wall with different types and sizes of displays.",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-2-KIT",
+    "name": "USB 2.0 Point to Point Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "USB 2.0 Point to Point Extender Kit over CAT5e--480mbps.",
+    "dealer_price": 361.9,
+    "msrp": 809.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-3-KIT",
+    "name": "USB 3.2 Gen 1 Extension Kit",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "100-meter extension kit for USB 3.2 Gen 1 with a USB-C host and a four USB-A port hub connected via category cable",
+    "dealer_price": 471.9,
+    "msrp": 1049.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-MV-41",
+    "name": "4K HDMI Multiview/Tiling processor",
+    "brand": "AVPro Edge",
+    "category": "Multiview Processor",
+    "description": "4K HDMI Multiview/Tiling processor with four inputs and one output, de-embedded audio, and loop-outs for each input",
+    "dealer_price": 1098.9,
+    "msrp": 2239.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-CAP-4",
+    "name": "1x4 Video Wall Processor",
+    "brand": "AVPro Edge",
+    "category": "Video Wall Processor",
+    "description": "1x4 Video Wall Processor with balanced audio extraction and HDMI loop out for cascading or larger walls; 4K60 4:4:4 support; Universal Scaler",
+    "dealer_price": 988.9,
+    "msrp": 2199.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-PC",
+    "name": "Fresco Software",
+    "brand": "AVPro Edge",
+    "category": "Software",
+    "description": "Software developed specifically for the Fresco 4 & 9 allows installers to build custom video walls of any size, from a standard 2x2 to a mosaic wall with different types and sizes of displays.",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-2-KIT",
+    "name": "USB 2.0 Point to Point Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "USB 2.0 Point to Point Extender Kit over CAT5e--480mbps.",
+    "dealer_price": 361.9,
+    "msrp": 809.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-3-KIT",
+    "name": "USB 3.2 Gen 1 Extension Kit",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "100-meter extension kit for USB 3.2 Gen 1 with a USB-C host and a four USB-A port hub connected via category cable",
+    "dealer_price": 471.9,
+    "msrp": 1049.0,
+    "status": ""
+  },
+  {
+    "sku": "V12HB09020",
+    "name": "EPSON DC-30 Document Camera",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "EPSON DC-30 Document Camera",
+    "dealer_price": 299,
+    "msrp": 399,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010L58",
+    "name": "EPSON Replacement Lamp for PowerLite S9/1220/1260 and EX2200/3200/5200/7200/VS200",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "EPSON Replacement Lamp for PowerLite S9/1220/1260 and EX2200/3200/5200/7200/VS200",
+    "dealer_price": 89,
+    "msrp": 119,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010L60",
+    "name": "EPSON Replacement Lamp For PowerLite 92/93/93+/95/96W/905/420/425 (ELPKS60)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "EPSON Replacement Lamp For PowerLite 92/93/93+/95/96W/905/420/425 (ELPKS60)",
+    "dealer_price": 95,
+    "msrp": 129,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010L84",
+    "name": "EPSON Replacement Lamp (Dual - Portrait Mode) Pro Z9000-Z11000 Series",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "EPSON Replacement Lamp (Dual - Portrait Mode) Pro Z9000-Z11000 Series",
+    "dealer_price": 199,
+    "msrp": 269,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010R02",
+    "name": "EPSON Living Station Lamp Module",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "EPSON Living Station Lamp Module",
+    "dealer_price": 149,
+    "msrp": 199,
+    "status": "discontinued"
+  },
+  {
+    "sku": "ELPGEMY",
+    "name": "INFLATABLE SCREEN W/STORAGE BAG",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "INFLATABLE SCREEN W/STORAGE BAG",
+    "dealer_price": 79,
+    "msrp": 99,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11H871020",
+    "name": "EPSON PowerLite 2250U Projector WUXGA 5000 Lumens",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "EPSON PowerLite 2250U Projector WUXGA 5000 Lumens",
+    "dealer_price": 1299,
+    "msrp": 1799,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11HA25020",
+    "name": "EPSON PowerLite L730U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA White",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "EPSON PowerLite L730U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA White",
+    "dealer_price": 2499,
+    "msrp": 3299,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11HA25120",
+    "name": "EPSON PowerLite L735U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA Black",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "EPSON PowerLite L735U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA Black",
+    "dealer_price": 2499,
+    "msrp": 3299,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11HA26020",
+    "name": "EPSON PowerLite L630U Laser Projector with lens shift WiFi 6 200 Lumens WUXGA White",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "EPSON PowerLite L630U Laser Projector with lens shift WiFi 6 200 Lumens WUXGA White",
+    "dealer_price": 2199,
+    "msrp": 2899,
+    "status": "discontinued"
+  },
+  {
+    "sku": "C12C815291",
+    "name": "EPSON Replacement Printer Cutter Blade (SP4000/SP7600/SP9600/SP4800/SP7800/SP9800)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Printer Cutter Blade for SP4000/SP7600/SP9600/SP4800/SP7800/SP9800",
+    "dealer_price": 88,
+    "msrp": 105,
     "status": "active"
   },
   {
-    "sku": "BT-10KUHD-030",
-    "name": "Ultra High Speed HDMI Cable 3M",
-    "brand": "BulletTrain",
-    "category": "Cable",
-    "description": "Ultra High Speed HDMI Cable 3 meters, supports 48Gbps, 8K, 4K120Hz",
-    "dealer_price": 69.0,
-    "msrp": 153,
+    "sku": "ELPRM-001",
+    "name": "RM EASITEACH SOFTWARE FOR WINDOWS/MAC",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "RM EASITEACH SOFTWARE FOR WINDOWS/MAC",
+    "dealer_price": 95,
+    "msrp": 129,
     "status": "active"
+  },
+  {
+    "sku": "ELPSP10",
+    "name": "EPSON PixiePlus Projector Controller",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "PixiePlus Projector Controller",
+    "dealer_price": 312,
+    "msrp": 416,
+    "status": "active"
+  },
+  {
+    "sku": "ELPSP12",
+    "name": "EPSON Programming Wand (PXE-PGM-Tool)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Programming Wand (PXE-PGM-Tool)",
+    "dealer_price": 194,
+    "msrp": 207,
+    "status": "active"
+  },
+  {
+    "sku": "V12H001K65",
+    "name": "EPSON Soft Carrying Case PL 1940W/1945W/1950/1955/1960/1965",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Soft Carrying Case for PL 1940W/1945W/1950/1955/1960/1965",
+    "dealer_price": 32,
+    "msrp": 74,
+    "status": "active"
+  },
+  {
+    "sku": "V12H001K67",
+    "name": "EPSON Soft Carrying Case for PowerLite 97/98/99W/965/S17/W17/X17",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Soft Carrying Case for PowerLite 97/98/99W/965/S17/W17/X17",
+    "dealer_price": 25,
+    "msrp": 60,
+    "status": "active"
+  },
+  {
+    "sku": "V12H001K68",
+    "name": "EPSON Soft Carrying Case PowerLite 1970-1985 (ELPKS68)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Soft Carrying Case PowerLite 1970-1985 (ELPKS68)",
+    "dealer_price": 33,
+    "msrp": 79,
+    "status": "active"
+  },
+  {
+    "sku": "V12H001K70",
+    "name": "EPSON Soft Travel Case for PowerLite 2042 2142W 2247U",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Soft Travel Case for PowerLite 2042 2142W 2247U",
+    "dealer_price": 20,
+    "msrp": 50,
+    "status": "active"
+  },
+  {
+    "sku": "V12H001K71",
+    "name": "EPSON Soft Carrying Case (ELPKS71)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Soft Carrying Case (ELPKS71)",
+    "dealer_price": 40,
+    "msrp": 125,
+    "status": "active"
+  },
+  {
+    "sku": "V12H001K72",
+    "name": "EPSON DC-30 Carrying Case ELPKS72",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "DC-30 Carrying Case ELPKS72",
+    "dealer_price": 38,
+    "msrp": 81,
+    "status": "active"
+  },
+  {
+    "sku": "V12H003001",
+    "name": "EPSON Cable Cover PowerLite PC7100/PC7500UB Black",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Cable Cover PowerLite PC7100/PC7500UB Black",
+    "dealer_price": 38,
+    "msrp": 56,
+    "status": "active"
+  },
+  {
+    "sku": "V12H003W01",
+    "name": "EPSON Safety Wire Projector Accessory / PowerLite S39 X39 W39 107 108 109W 970 975W 980W 99U 1200 series 1700 series 2000 series PowerLite L",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Safety Wire Projector Accessory for various PowerLite models",
+    "dealer_price": 14,
+    "msrp": 32,
+    "status": "active"
+  },
+  {
+    "sku": "V12H005A02",
+    "name": "EPSON Wireless Lan Module for the BrightLink 1485FI Projector",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Wireless Lan Module for the BrightLink 1485FI Projector",
+    "dealer_price": 96,
+    "msrp": 304,
+    "status": "active"
+  },
+  {
+    "sku": "V12H006A02",
+    "name": "EPSON 100 Whiteboard for Projection in 16:9 /BrightLink 735Fi/1480Fi/1485Fi",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "100 Whiteboard for Projection in 16:9 /BrightLink 735Fi/1480Fi/1485Fi",
+    "dealer_price": 792,
+    "msrp": 1819,
+    "status": "active"
+  },
+  {
+    "sku": "V12H007A14",
+    "name": "EPSON HD BaseT Transmitter/Control Pad for the PowerLite L400/L600 and Pro L Series Projectors",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "HD BaseT Transmitter/Control Pad for the PowerLite L400/L600 and Pro L Series Projectors",
+    "dealer_price": 258,
+    "msrp": 721,
+    "status": "active"
+  },
+  {
+    "sku": "V12H007A23",
+    "name": "EPSON Interactive Touch Module for the BrightLink 1480Fi Projector",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Interactive Touch Module for the BrightLink 1480Fi Projector",
+    "dealer_price": 177,
+    "msrp": 503,
+    "status": "active"
+  },
+  {
+    "sku": "V12H724001",
+    "name": "EPSON Pen Extension for BrightLink 5xx Series",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Pen Extension for BrightLink 5xx Series",
+    "dealer_price": 39,
+    "msrp": 85,
+    "status": "active"
+  },
+  {
+    "sku": "V12H731P02",
+    "name": "EPSON Wireless Lan Module (ELPAP10)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Wireless Lan Module (ELPAP10)",
+    "dealer_price": 96,
+    "msrp": 195,
+    "status": "active"
+  },
+  {
+    "sku": "V12H773010",
+    "name": "EPSON Interactive Pen A (Orange) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Interactive Pen A (Orange) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "dealer_price": 35,
+    "msrp": 72,
+    "status": "active"
+  },
+  {
+    "sku": "V12H774010",
+    "name": "EPSON Interactive Pen B (Blue) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Interactive Pen B (Blue) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "dealer_price": 35,
+    "msrp": 72,
+    "status": "active"
+  },
+  {
+    "sku": "V12H775010",
+    "name": "EPSON Replacement Pen Tips (Hard) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Pen Tips (Hard) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "dealer_price": 14,
+    "msrp": 26,
+    "status": "active"
+  },
+  {
+    "sku": "V12H776010",
+    "name": "EPSON Replacement Pen Tips (Soft) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Pen Tips (Soft) for Brightlink 685Wi/695Wi/725Wi/735Fi/1480Fi/1485Fi",
+    "dealer_price": 14,
+    "msrp": 26,
+    "status": "active"
+  },
+  {
+    "sku": "V12H831000",
+    "name": "EPSON 100 16:10 White Board/Dry Erase accessory for BrightLink 685Wi/695Wi/725Wi",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "100 16:10 White Board/Dry Erase accessory for BrightLink 685Wi/695Wi/725Wi",
+    "dealer_price": 792,
+    "msrp": 1819,
+    "status": "active"
+  },
+  {
+    "sku": "V12H927020",
+    "name": "EPSON PowerLite Pilot 3",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "PowerLite Pilot 3",
+    "dealer_price": 221,
+    "msrp": 520,
+    "status": "active"
+  },
+  {
+    "sku": "V12HA05A09",
+    "name": "EPSON Finger Touch Bracket for the BrightLink 1485Fi Projector",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Finger Touch Bracket for the BrightLink 1485Fi Projector",
+    "dealer_price": 44,
+    "msrp": 125,
+    "status": "active"
+  },
+  {
+    "sku": "V12HA46010",
+    "name": "EPSON External Projector Camera ( ELPEC01)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "External Projector Camera ( ELPEC01)",
+    "dealer_price": 397,
+    "msrp": 1164,
+    "status": "active"
+  },
+  {
+    "sku": "V12HB11020",
+    "name": "EPSON PowerLite Pilot 3R Control Box",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "PowerLite Pilot 3R Control Box",
+    "dealer_price": 221,
+    "msrp": 488,
+    "status": "active"
+  },
+  {
+    "sku": "V12HB45020",
+    "name": "EPSON Mobile Display Cart",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Mobile Display Cart",
+    "dealer_price": 1776,
+    "msrp": 4403,
+    "status": "active"
+  },
+  {
+    "sku": "V12HB450201E",
+    "name": "EPSON Mobile Cart and 810E Projector Bundle",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Mobile Cart and 810E Projector Bundle",
+    "dealer_price": 4556,
+    "msrp": 11255,
+    "status": "active"
+  },
+  {
+    "sku": "V12HB450205E",
+    "name": "EPSON Mobile Cart and 815E Projector Bundle",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Mobile Cart and 815E Projector Bundle",
+    "dealer_price": 4556,
+    "msrp": 11255,
+    "status": "active"
+  },
+  {
+    "sku": "V12H378001",
+    "name": "EPSON BrightLink 450Wi Interactive Pen",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "BrightLink 450Wi Interactive Pen",
+    "dealer_price": 35,
+    "msrp": 49,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V12HB09020",
+    "name": "EPSON DC-30 Document Camera",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "DC-30 Document Camera",
+    "dealer_price": 299,
+    "msrp": 399,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010L58",
+    "name": "EPSON Replacement Lamp for PowerLite S9/1220/1260 and EX2200/3200/5200/7200/VS200",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Lamp for PowerLite S9/1220/1260 and EX2200/3200/5200/7200/VS200",
+    "dealer_price": 89,
+    "msrp": 119,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010L60",
+    "name": "EPSON Replacement Lamp For PowerLite 92/93/93+/95/96W/905/420/425 (ELPKS60)",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Lamp For PowerLite 92/93/93+/95/96W/905/420/425 (ELPKS60)",
+    "dealer_price": 95,
+    "msrp": 129,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H010L84",
+    "name": "EPSON Replacement Lamp (Dual - Portrait Mode) Pro Z9000-Z11000 Series",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Lamp (Dual - Portrait Mode) Pro Z9000-Z11000 Series",
+    "dealer_price": 199,
+    "msrp": 269,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V13H134A31",
+    "name": "EPSON Replacement Air Filter for the PowerLite 1750/1751/1760W/1761W/1770W/1771W/1775W/1776W",
+    "brand": "EPSON",
+    "category": "ACCESSORIES",
+    "description": "Replacement Air Filter for the PowerLite 1750/1751/1760W/1761W/1770W/1771W/1775W/1776W",
+    "dealer_price": 19,
+    "msrp": 29,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11H871020",
+    "name": "EPSON PowerLite 2250U Projector WUXGA 5000 Lumens",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "PowerLite 2250U Projector WUXGA 5000 Lumens",
+    "dealer_price": 1299,
+    "msrp": 1799,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11HA25020",
+    "name": "EPSON PowerLite L730U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA White",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "PowerLite L730U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA White",
+    "dealer_price": 2499,
+    "msrp": 3299,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11HA25120",
+    "name": "EPSON PowerLite L735U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA Black",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "PowerLite L735U Laser Projector with lens shift WiFi 7 000 Lumens WUXGA Black",
+    "dealer_price": 2499,
+    "msrp": 3299,
+    "status": "discontinued"
+  },
+  {
+    "sku": "V11HA26020",
+    "name": "EPSON PowerLite L630U Laser Projector with lens shift WiFi 6 200 Lumens WUXGA White",
+    "brand": "EPSON",
+    "category": "HARDWARE",
+    "description": "PowerLite L630U Laser Projector with lens shift WiFi 6 200 Lumens WUXGA White",
+    "dealer_price": 2199,
+    "msrp": 2899,
+    "status": "discontinued"
+  },
+  {
+    "sku": "KAMUT2L II",
+    "name": "Azimut-KAMUT2L II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KZ14 I + 1 KU44-2 + 1 KA02  I+ 1 K-REMUCTRL  - BLK",
+    "dealer_price": 3031,
+    "msrp": 5511,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2LW II",
+    "name": "Azimut-KAMUT2LW II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KZ14W I + 1 KU44W-2 + 1 KA02  I + 1 K-REMUCTRL - WHT",
+    "dealer_price": 3031,
+    "msrp": 5511,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2LX II",
+    "name": "Azimut-KAMUT2LX II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Customizable parts: KZ14 I + KU44-2",
+    "dealer_price": 3599,
+    "msrp": 6544,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2L1 II",
+    "name": "Azimut-KAMUT2L1 II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KZ1 I+ 1 KTR24 + 1 KA02  I+ 1 K-REMUCTRL  - BLK",
+    "dealer_price": 2368,
+    "msrp": 4305,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2L1W II",
+    "name": "Azimut-KAMUT2L1W II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KZ1W I + 1 KTR24 + 1 KA02 I + 1 K-REMUCTRL - WHT",
+    "dealer_price": 2368,
+    "msrp": 4305,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2L1X II",
+    "name": "Azimut-KAMUT2L1X II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Customziable parts: KZ1 I",
+    "dealer_price": 2747,
+    "msrp": 4995,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2L14 II",
+    "name": "Azimut-KAMUT2L14 II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KZ14  I + 1 KTR25 + 1 KA02 I + 1 K-REMUCTRL - BLK",
+    "dealer_price": 2652,
+    "msrp": 4822,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2L14W II",
+    "name": "Azimut-KAMUT2L14W II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KZ14W  I + 1 KTR25 + 1 KA02 I+ 1 K-REMUCTRL - WHT",
+    "dealer_price": 2652,
+    "msrp": 4822,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2L14X II",
+    "name": "Azimut-KAMUT2L14X II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Customizable parts: KZ14 I",
+    "dealer_price": 3126,
+    "msrp": 5684,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2V25 II",
+    "name": "Azimut-KAMUT2V25 II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KV25 II + 1 KTR26 + 1 KA02 I + 1 K-REMUCTRL - BLK",
+    "dealer_price": 3789,
+    "msrp": 6889,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2V25W II",
+    "name": "Azimut-KAMUT2V25W II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Professional sound system composed of 2 KV25W II + 1 KTR26 + 1 KA02 I + 1 K-REMUCTRL - WHT",
+    "dealer_price": 3789,
+    "msrp": 6889,
+    "status": "active"
+  },
+  {
+    "sku": "KAMUT2V25X II",
+    "name": "Azimut-KAMUT2V25X II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Customizable parts: KV25 II",
+    "dealer_price": 4167,
+    "msrp": 7576,
+    "status": "active"
+  },
+  {
+    "sku": "K-CASE2L1 II",
+    "name": "Plastic Demo Case with Azimut-KAMUT2L1  II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Plastic Demo Case with Azimut-KAMUT2L1  II",
+    "dealer_price": 3031,
+    "msrp": 5511,
+    "status": "active"
+  },
+  {
+    "sku": "K-CASE2L1W II",
+    "name": "Plastic Demo Case with Azimut-KAMUT2L1W II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Plastic Demo Case with Azimut-KAMUT2L1W II",
+    "dealer_price": 3031,
+    "msrp": 5511,
+    "status": "active"
+  },
+  {
+    "sku": "K-CASE2L14 II",
+    "name": "Plastic Demo Case with Azimut-KAMUT2L14 II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Plastic Demo Case with Azimut-KAMUT2L14 II",
+    "dealer_price": 3362,
+    "msrp": 6113,
+    "status": "active"
+  },
+  {
+    "sku": "K-CASE2L14W II",
+    "name": "Plastic Demo Case with Azimut-KAMUT2L14W II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Plastic Demo Case with Azimut-KAMUT2L14W II",
+    "dealer_price": 3362,
+    "msrp": 6113,
+    "status": "active"
+  },
+  {
+    "sku": "K-CASE2V25 II",
+    "name": "Plastic Demo Case with Azimut-KAMUT2V25 II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Plastic Demo Case with Azimut-KAMUT2V25 II",
+    "dealer_price": 4452,
+    "msrp": 8095,
+    "status": "active"
+  },
+  {
+    "sku": "K-CASE2V25W II",
+    "name": "Plastic Demo Case with Azimut-KAMUT2V25W II",
+    "brand": "K-array",
+    "category": "Azimut",
+    "description": "Plastic Demo Case with Azimut-KAMUT2V25W II",
+    "dealer_price": 4452,
+    "msrp": 8095,
+    "status": "active"
+  },
+  {
+    "sku": "KZ1 I",
+    "name": "Lyzard-KZ1 I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 4cm-long, aluminium  point source speaker-BLK",
+    "dealer_price": 308,
+    "msrp": 560,
+    "status": "active"
+  },
+  {
+    "sku": "KZ1W I",
+    "name": "Lyzard-KZ1W I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 4cm-long, aluminium  point source speaker-WHT",
+    "dealer_price": 308,
+    "msrp": 560,
+    "status": "active"
+  },
+  {
+    "sku": "KZ1X I",
+    "name": "Lyzard-KZ1X I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Customizable parts: box + grille",
+    "dealer_price": 426,
+    "msrp": 775,
+    "status": "active"
+  },
+  {
+    "sku": "KZ1R I",
+    "name": "Lyzard-KZ1R I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 4cm-long, aluminium  point source speaker, in-wall mounting version-BLK",
+    "dealer_price": 308,
+    "msrp": 560,
+    "status": "active"
+  },
+  {
+    "sku": "KZ1RW I",
+    "name": "Lyzard-KZ1RW I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 4cm-long, aluminium  point source speaker, in-wall mounting version-WHT",
+    "dealer_price": 308,
+    "msrp": 560,
+    "status": "active"
+  },
+  {
+    "sku": "KZ1RX I",
+    "name": "Lyzard-KZ1RX I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Customizable parts: box + grille",
+    "dealer_price": 426,
+    "msrp": 775,
+    "status": "active"
+  },
+  {
+    "sku": "KZ14 I",
+    "name": "Lyzard-KZ14 I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 10cm-long, aluminium line array speaker-BLK",
+    "dealer_price": 388,
+    "msrp": 705,
+    "status": "active"
+  },
+  {
+    "sku": "KZ14W I",
+    "name": "Lyzard-KZ14W I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 10cm-long, aluminium line array speaker-WHT",
+    "dealer_price": 388,
+    "msrp": 705,
+    "status": "active"
+  },
+  {
+    "sku": "KZ14X I",
+    "name": "Lyzard-KZ14X I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Customizable parts: box  + grille",
+    "dealer_price": 587,
+    "msrp": 1067,
+    "status": "active"
+  },
+  {
+    "sku": "KZ14R I",
+    "name": "Lyzard-KZ14R I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 10cm-long, aluminium line array speaker, in-wall mounting version-BLK",
+    "dealer_price": 388,
+    "msrp": 705,
+    "status": "active"
+  },
+  {
+    "sku": "KZ14RW I",
+    "name": "Lyzard-KZ14RW I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Ultra-mini, 10cm-long, aluminium line array speaker, in-wall mounting version-WHT",
+    "dealer_price": 388,
+    "msrp": 705,
+    "status": "active"
+  },
+  {
+    "sku": "KZ14RX I",
+    "name": "Lyzard-KZ14RX I",
+    "brand": "K-array",
+    "category": "Lyzard",
+    "description": "Customizable parts: box  + grille",
+    "dealer_price": 587,
+    "msrp": 1067,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "AudioControl",
+    "brand": "AudioControl",
+    "category": "",
+    "description": "AudioControl brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "AVPro Edge",
+    "brand": "AVPro Edge",
+    "category": "",
+    "description": "AVPro Edge brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "Bullet Train",
+    "brand": "Bullet Train",
+    "category": "",
+    "description": "Bullet Train brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "Murideo",
+    "brand": "Murideo",
+    "category": "",
+    "description": "Murideo brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "ProControl",
+    "brand": "ProControl",
+    "category": "",
+    "description": "ProControl brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "RTI",
+    "brand": "RTI",
+    "category": "",
+    "description": "RTI brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "",
+    "name": "Then Audio",
+    "brand": "Then Audio",
+    "category": "",
+    "description": "Then Audio brand sales data for Aug 2024 – Jul 2025.",
+    "dealer_price": 0,
+    "msrp": 0,
+    "status": "active"
+  },
+  {
+    "sku": "AC-302340",
+    "name": "AMS SYSTEMS LLC",
+    "brand": "AudioControl",
+    "category": "Resi Pro",
+    "description": "AMS SYSTEMS LLC, New York, Resi Pro, 10% DFI, AudioControl Sales 2025: 38111.36",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-310845",
+    "name": "AUDIO INTERIORS. INC.",
+    "brand": "AudioControl",
+    "category": "ProSource Standard",
+    "description": "AUDIO INTERIORS. INC., New York, ProSource Standard, 5% DFI, AudioControl Sales 2025: 1233.48",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-315719",
+    "name": "Audio Video Invasion, Inc",
+    "brand": "AudioControl",
+    "category": "Resi Pro",
+    "description": "Audio Video Invasion, Inc, New York, Resi Pro, 10% DFI, AudioControl Sales 2025: 17673.21",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-317057",
+    "name": "AV DESIGN & INTEGRATION, INC.",
+    "brand": "AudioControl",
+    "category": "ProSource Standard",
+    "description": "AV DESIGN & INTEGRATION, INC., New York, ProSource Standard, 5% DFI, AudioControl Sales 2025: 6159.62",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-319110",
+    "name": "BAUER AUDIO, INC.",
+    "brand": "AudioControl",
+    "category": "Resi Basic",
+    "description": "BAUER AUDIO, INC., New York, Resi Basic, Dealer Price, AudioControl Sales 2025: 0.0",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-321454",
+    "name": "CLARITY CUSTOM, INC.",
+    "brand": "AudioControl",
+    "category": "Resi Basic",
+    "description": "CLARITY CUSTOM, INC., New York, Resi Basic, Dealer Price, AudioControl Sales 2025: 1877.09",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-321541",
+    "name": "CONNECT CONSULTING INC.",
+    "brand": "AudioControl",
+    "category": "Azione Pro",
+    "description": "CONNECT CONSULTING INC., New Jersey, Azione Pro, 12% DFI, AudioControl Sales 2025: 23075.61",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-324094",
+    "name": "DIGITAL DELIVERY GROUP",
+    "brand": "AudioControl",
+    "category": "Dist",
+    "description": "DIGITAL DELIVERY GROUP, New York, Dist, AudioControl Sales 2025: 46645.84",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-330436",
+    "name": "GLOBAL CUSTOM INTEGRATORS",
+    "brand": "AudioControl",
+    "category": "ProSource Standard",
+    "description": "GLOBAL CUSTOM INTEGRATORS, New York, ProSource Standard, 5% DFI, AudioControl Sales 2025: 13535.79",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-334006",
+    "name": "HIDEF LLC",
+    "brand": "AudioControl",
+    "category": "ProSource Standard",
+    "description": "HIDEF LLC, New Jersey, ProSource Standard, 5% DFI, AudioControl Sales 2025: 2000.70",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": "Active"
+  },
+  {
+    "sku": "AC-MV-41",
+    "name": "4K HDMI Multiview/Tiling processor",
+    "brand": "AVPro Edge",
+    "category": "Multiview Processor",
+    "description": "4K HDMI Multiview/Tiling processor with four inputs and one output, de-embedded audio, and loop-outs for each input",
+    "dealer_price": 1098.9,
+    "msrp": 2239.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-CAP-4",
+    "name": "1x4 Video Wall Processor",
+    "brand": "AVPro Edge",
+    "category": "Video Wall Processor",
+    "description": "1x4 Video Wall Processor with balanced audio extraction and HDMI loop out for cascading or larger walls; 4K60 4:4:4 support; Universal Scaler",
+    "dealer_price": 988.9,
+    "msrp": 2199.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-FRESCO-PC",
+    "name": "Fresco Software",
+    "brand": "AVPro Edge",
+    "category": "Software",
+    "description": "Software developed specifically for the Fresco 4 & 9 allows installers to build custom video walls of any size, from a standard 2x2 to a mosaic wall with different types and sizes of displays.",
+    "dealer_price": 0.0,
+    "msrp": 0.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-2-KIT",
+    "name": "USB 2.0 Point to Point Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "USB 2.0 Point to Point Extender Kit over CAT5e--480mbps.",
+    "dealer_price": 361.9,
+    "msrp": 809.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EXUSB-3-KIT",
+    "name": "USB 3.2 Gen 1 Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "USB Extender Kit",
+    "description": "100-meter extension kit for USB 3.2 Gen 1 with a USB-C host and a four USB-A port hub connected via category cable",
+    "dealer_price": 471.9,
+    "msrp": 1049.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX40-444-KIT",
+    "name": "HDBaseT 40m 4K Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit. ICT 18G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR. ICT for full HDR/HDMI Pass-Through. Full HDR, 4K60 4:4:4.",
+    "dealer_price": 504.9,
+    "msrp": 1129.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX40-444-KIT-W",
+    "name": "Weatherproof HDBaseT 40m 4K Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "Weatherproof HDBaseT (CAT6) Extender Kit. ICT 18G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR. ICT for full HDR/HDMI Pass-Through. Full HDR, 4K60 4:4:4.",
+    "dealer_price": 599.9,
+    "msrp": 1339.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX40-444-PLUS-KIT",
+    "name": "HDBaseT 40m 4K PLUS Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit. ICT 18G, 40m 4K (70m HD) Extender with I-Pass, Bi-Directional Power, RS232, IR - ICT for full HDR/HDMI Pass-Through. Full HDR, 4K60 4:4:4. PLUS  - ARC & Selectable Host/Device USB 2.0 (KVM/PTZ)",
+    "dealer_price": 757.9,
+    "msrp": 1689.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX70-444-KIT",
+    "name": "HDBaseT 70m 4K Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit. ICT 18G, 70m 4K (100m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR and Ethernet. ICT for full HDR/HDMI Pass-Through. Full HDR, 4K60 4:4:4. Features Long Range mode for 150m 1080P transmission",
+    "dealer_price": 636.9,
+    "msrp": 1419.0,
+    "status": ""
+  },
+  {
+    "sku": "AC-EX70-UHD-KIT",
+    "name": "HDBaseT 70m UHD Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender Set",
+    "description": "HDBaseT (CAT6) Extender Kit. 10.2G, 40m 4K (70m HD) Slim Extender with I-Pass, Bi-Directional Power, RS232, IR. 4K60 4:2:0 Max, HDR/HLG: 4K30 4:2:0 12 BIT, 4K30 4:2:2 12 BIT, Dolby Vision 30 FPS",
+    "dealer_price": 339.9,
+    "msrp": 759.0,
+    "status": ""
   }
 ]
