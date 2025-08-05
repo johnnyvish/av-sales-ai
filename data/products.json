@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "id": "rx7000",
+      "name": "RX 7000",
+      "model": "RX-7000",
+      "brand": "AVPro Edge",
+      "category": "Video Extender",
+      "price": 1299.99,
+      "availability": "in_stock",
+      "description": "4K HDR HDMI extender over IP with low latency",
+      "specifications": {
+        "resolution": "4K@60Hz",
+        "hdcp": "HDCP 2.2",
+        "latency": "<1ms"
+      },
+      "compatible_products": ["rx7001", "tx7000"],
+      "keywords": ["rx 7000", "rx-7000", "video extender", "hdmi extender"]
+    },
+    {
+      "id": "rx7001",
+      "name": "RX 7001",
+      "model": "RX-7001",
+      "brand": "AVPro Edge",
+      "category": "Video Receiver",
+      "price": 899.99,
+      "availability": "in_stock",
+      "description": "4K HDMI receiver for RX 7000 series",
+      "specifications": {
+        "resolution": "4K@60Hz",
+        "inputs": "1x HDMI"
+      },
+      "compatible_products": ["rx7000", "tx7000"],
+      "keywords": ["rx 7001", "rx-7001", "receiver", "hdmi receiver"]
+    },
+    {
+      "id": "epson5050",
+      "name": "Epson Pro Cinema 5050UB",
+      "model": "5050UB",
+      "brand": "Epson",
+      "category": "Projector",
+      "price": 2999.99,
+      "availability": "in_stock",
+      "description": "4K PRO-UHD projector with advanced 3-chip design",
+      "specifications": {
+        "resolution": "4K PRO-UHD",
+        "brightness": "2600 lumens",
+        "contrast": "1,000,000:1"
+      },
+      "compatible_products": ["projector_mount_001", "hdmi_cable_001"],
+      "keywords": ["epson", "5050", "5050ub", "projector", "4k projector"]
+    }
+  ]
+}
