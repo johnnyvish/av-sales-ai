@@ -1,0 +1,52 @@
+[
+  {
+    "sku": "AC-MV-41",
+    "name": "4K HDMI Multiview/Tiling Processor",
+    "brand": "AVPro Edge",
+    "category": "Multiview Processor",
+    "description": "4K HDMI Multiview/Tiling processor with four inputs and one output, de-embedded audio, and loop-outs for each input",
+    "dealer_price": 1098.9,
+    "msrp": 2239,
+    "status": "active"
+  },
+  {
+    "sku": "AC-MX-44",
+    "name": "4K HDMI 4x4 Matrix Switch",
+    "brand": "AVPro Edge",
+    "category": "Matrix Switch",
+    "description": "4K HDMI 4x4 Matrix Switch with 18Gbps bandwidth, supports 4K60 4:4:4, HDCP 2.2",
+    "dealer_price": 1209.0,
+    "msrp": 2689,
+    "status": "active"
+  },
+  {
+    "sku": "AC-EX70-444-KIT",
+    "name": "HDBaseT Extender Kit",
+    "brand": "AVPro Edge",
+    "category": "HDBaseT Extender",
+    "description": "HDBaseT Extender Kit extends 4K HDMI up to 70 meters over single CAT cable",
+    "dealer_price": 637.0,
+    "msrp": 1419,
+    "status": "active"
+  },
+  {
+    "sku": "AC-PSU-48V-EX70",
+    "name": "48V Power Supply",
+    "brand": "AVPro Edge",
+    "category": "Power Supply",
+    "description": "48V DC Power Supply for HDBaseT extenders and matrix switches",
+    "dealer_price": 119.0,
+    "msrp": 265,
+    "status": "active"
+  },
+  {
+    "sku": "BT-10KUHD-030",
+    "name": "Ultra High Speed HDMI Cable 3M",
+    "brand": "BulletTrain",
+    "category": "Cable",
+    "description": "Ultra High Speed HDMI Cable 3 meters, supports 48Gbps, 8K, 4K120Hz",
+    "dealer_price": 69.0,
+    "msrp": 153,
+    "status": "active"
+  }
+]
