@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AV Dealer Portal",
-  description: "AV Dealer Portal",
+  title: "AV Automation",
+  description: "AV Automation",
 };
 
 export default function RootLayout({
