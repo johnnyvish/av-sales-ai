@@ -4,7 +4,11 @@ import {
   isEmailProcessed,
   markEmailAsProcessed,
 } from "@/lib/db";
-import { generateEmailResponse, isProductInquiryAI } from "@/lib/ai";
+import {
+  generateEmailResponse,
+  classifyEmailType,
+  generateUpsellResponse,
+} from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
 import fs from "fs";
@@ -151,14 +155,30 @@ async function processEmail(
       return;
     }
 
-    // Check if this looks like a product inquiry using AI
-    const isInquiry = await isProductInquiryAI(emailBody, subject);
+    // Classify email type using single AI call
+    const emailType = await classifyEmailType(emailBody, subject);
 
-    if (isInquiry) {
+    if (emailType === "purchase_order") {
+      console.log(
+        "Email identified as purchase order by AI - generating upsell"
+      );
+      const productCatalog = getProductCatalog();
+
+      const upsellResponse = await generateUpsellResponse(
+        emailBody,
+        subject,
+        productCatalog
+      );
+
+      if (upsellResponse) {
+        await sendReply(gmail, email.data, upsellResponse);
+        await markEmailAsProcessed(messageId, user.id);
+        console.log("Purchase order processed and upsell sent successfully");
+      }
+    } else if (emailType === "product_inquiry") {
       console.log("Email identified as product inquiry by AI");
       const productCatalog = getProductCatalog();
 
-      // Use AI to analyze email and generate response
       const aiResponse = await generateEmailResponse(
         emailBody,
         subject,
@@ -166,17 +186,14 @@ async function processEmail(
       );
 
       if (aiResponse) {
-        // Send reply
         await sendReply(gmail, email.data, aiResponse);
-
-        // Mark as processed
         await markEmailAsProcessed(messageId, user.id);
-
         console.log("Email processed and reply sent successfully");
       }
     } else {
-      console.log("Email not identified as product inquiry by AI, skipping");
-      // Still mark as processed to avoid reprocessing
+      console.log(
+        "Email not identified as product inquiry or purchase order, skipping"
+      );
       await markEmailAsProcessed(messageId, user.id);
     }
   } catch (error) {
