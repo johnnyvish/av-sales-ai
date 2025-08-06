@@ -4,7 +4,11 @@ import {
   isEmailProcessed,
   markEmailAsProcessed,
 } from "@/lib/db";
-import { generateResponse, classifyEmail } from "@/lib/ai";
+import {
+  generateResponse,
+  classifyEmailType,
+  generateUpsellResponse,
+} from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
 
@@ -179,12 +183,24 @@ async function processEmail(
     }
 
     // Classify the email type
-    const emailType = await classifyEmail(emailBody, subject);
+    const emailType = await classifyEmailType(emailBody, subject);
 
-    if (emailType !== "other") {
-      console.log(`Email classified as ${emailType} - generating response`);
+    if (emailType === "purchase_order") {
+      console.log(
+        "Email classified as purchase order - generating upsell response"
+      );
 
-      const aiResponse = await generateResponse(emailBody, subject, emailType);
+      const upsellResponse = await generateUpsellResponse(emailBody, subject);
+
+      if (upsellResponse) {
+        await sendReply(gmail, email.data, upsellResponse);
+        await markEmailAsProcessed(messageId, user.id);
+        console.log("Purchase order processed and upsell sent successfully");
+      }
+    } else if (emailType === "product_inquiry") {
+      console.log("Email classified as product inquiry - generating response");
+
+      const aiResponse = await generateResponse(emailBody, subject);
 
       if (aiResponse) {
         await sendReply(gmail, email.data, aiResponse);

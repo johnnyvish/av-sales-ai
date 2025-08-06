@@ -221,7 +221,7 @@ ${
   };
 }
 
-export async function generateEmailResponse(
+export async function generateResponse(
   emailBody: string,
   subject: string
 ): Promise<string | null> {
