@@ -12,6 +12,11 @@ import {
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
 
+// Rate limiting and deduplication
+const processedWebhooks = new Map<string, number>();
+const WEBHOOK_COOLDOWN = 30000; // 30 seconds
+const MAX_EMAILS_PER_BATCH = 3; // Process max 3 new emails per batch
+
 // Type definitions
 interface User {
   id: number;
@@ -45,6 +50,28 @@ export async function POST(request: Request) {
       if (!emailAddress) {
         console.log("No emailAddress in Pub/Sub message");
         return NextResponse.json({ message: "No email address provided" });
+      }
+
+      // Rate limiting - prevent processing the same user too frequently
+      const now = Date.now();
+      const lastProcessed = processedWebhooks.get(emailAddress);
+      if (lastProcessed && now - lastProcessed < WEBHOOK_COOLDOWN) {
+        console.log(
+          `Rate limiting webhook for ${emailAddress}, last processed ${
+            (now - lastProcessed) / 1000
+          }s ago`
+        );
+        return NextResponse.json({ message: "Rate limited" });
+      }
+
+      processedWebhooks.set(emailAddress, now);
+
+      // Clean up old entries (keep only last hour)
+      for (const [email, timestamp] of processedWebhooks.entries()) {
+        if (now - timestamp > 3600000) {
+          // 1 hour
+          processedWebhooks.delete(email);
+        }
       }
 
       // Get user from database
@@ -86,7 +113,15 @@ export async function POST(request: Request) {
       );
 
       if (response.data.messages) {
+        let processedCount = 0;
         for (const message of response.data.messages) {
+          if (processedCount >= MAX_EMAILS_PER_BATCH) {
+            console.log(
+              `Reached max emails per batch (${MAX_EMAILS_PER_BATCH}), stopping`
+            );
+            break;
+          }
+
           if (!message.id) continue;
 
           // Check if we've already processed this email
@@ -96,6 +131,7 @@ export async function POST(request: Request) {
             console.log(`Processing new email: ${message.id}`);
             // Process this new email
             await processEmail(gmail, message.id, user);
+            processedCount++;
           } else {
             console.log(`Email already processed: ${message.id}`);
           }

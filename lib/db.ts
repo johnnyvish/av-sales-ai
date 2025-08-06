@@ -48,7 +48,7 @@ export async function markEmailAsProcessed(emailId: string, userId: number) {
   const client = await pool.connect();
   try {
     await client.query(
-      "INSERT INTO processed_emails (email_id, user_id) VALUES ($1, $2)",
+      "INSERT INTO processed_emails (email_id, user_id) VALUES ($1, $2) ON CONFLICT (email_id) DO NOTHING",
       [emailId, userId]
     );
   } finally {

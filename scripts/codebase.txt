@@ -1,38 +1,632 @@
+===== File: lib/search.ts =====
+Type: .ts
+----- Content Start -----
+import Fuse from "fuse.js";
+
+interface Product {
+  name: string;
+  model: string;
+  category: string;
+  price: number;
+  description: string;
+  [key: string]: unknown;
+}
+
+// Import catalog data using dynamic import
+let fullCatalog: Product[] = [];
+
+// Initialize catalog data
+async function initializeCatalog() {
+  if (fullCatalog.length === 0) {
+    try {
+      const catalogData = await import("../data/av_products.json");
+      fullCatalog = catalogData.default as Product[];
+    } catch (error) {
+      console.error("Failed to load catalog data:", error);
+      fullCatalog = [];
+    }
+  }
+  return fullCatalog;
+}
+
+// Configure Fuse.js for comprehensive product search
+const fuseOptions = {
+  // Search across all relevant fields with weighted importance
+  keys: [
+    { name: "name", weight: 0.4 }, // Product name is most important
+    { name: "model", weight: 0.3 }, // Model numbers are very important
+    { name: "description", weight: 0.2 }, // Descriptions help with context
+    { name: "category", weight: 0.1 }, // Category for broad searches
+    { name: "Product Type", weight: 0.05 }, // Additional product classification
+    { name: "Class", weight: 0.05 }, // Product class
+    { name: "Sub Class", weight: 0.05 }, // Sub classification
+    { name: "Product Code", weight: 0.25 }, // Alternative product codes
+    // Include any other searchable fields from your JSON
+  ],
+
+  // Search configuration
+  threshold: 0.4, // 0.0 = exact match, 1.0 = match anything
+  distance: 100, // Maximum allowed distance for fuzzy matching
+  includeScore: true, // Include search relevance score
+  includeMatches: true, // Show which fields matched
+  minMatchCharLength: 2, // Minimum characters to trigger a match
+  shouldSort: true, // Sort results by relevance
+
+  // Advanced options for better matching
+  ignoreLocation: false, // Consider location of match in string
+  ignoreFieldNorm: false, // Field length normalization
+  fieldNormWeight: 1, // How much field length affects score
+};
+
+// Fuse instance will be created dynamically for each search
+
+// Enhanced search function with multiple strategies
+async function searchProducts(
+  query: string,
+  limit: number = 10
+): Promise<Product[]> {
+  if (!query || query.trim() === "") {
+    return [];
+  }
+
+  const catalog = await initializeCatalog();
+  if (catalog.length === 0) return [];
+
+  const searchTerm = query.trim();
+
+  // Create Fuse instance with current catalog
+  const fuse = new Fuse(catalog, fuseOptions);
+
+  // Strategy 1: Use Fuse.js for intelligent fuzzy search
+  const fuseResults = fuse.search(searchTerm, { limit: limit * 2 }); // Get more results to filter
+
+  // Strategy 2: Direct field searches for exact matches (higher priority)
+  const exactMatches: Product[] = [];
+  const searchLower = searchTerm.toLowerCase();
+
+  catalog.forEach((product) => {
+    // Exact model number match (highest priority)
+    if (
+      product.model?.toLowerCase() === searchLower ||
+      product["Product Code"]?.toString().toLowerCase() === searchLower
+    ) {
+      exactMatches.push(product);
+    }
+    // Exact name match
+    else if (product.name?.toLowerCase() === searchLower) {
+      exactMatches.push(product);
+    }
+  });
+
+  // Strategy 3: Combine and deduplicate results
+  const combinedResults = new Map<
+    string,
+    { product: Product; score: number }
+  >();
+
+  // Add exact matches with highest score (0)
+  exactMatches.forEach((product) => {
+    combinedResults.set(product.model, { product, score: 0 });
+  });
+
+  // Add Fuse results if not already included
+  fuseResults.forEach((result) => {
+    const product = result.item;
+    const score = result.score || 1;
+
+    if (!combinedResults.has(product.model)) {
+      combinedResults.set(product.model, { product, score });
+    }
+  });
+
+  // Strategy 4: Sort by relevance and return
+  const sortedResults = Array.from(combinedResults.values())
+    .sort((a, b) => a.score - b.score) // Lower score = better match
+    .slice(0, limit)
+    .map((result) => result.product);
+
+  return sortedResults;
+}
+
+// Advanced search with category filtering
+async function searchProductsByCategory(
+  query: string,
+  category: string,
+  limit: number = 10
+): Promise<Product[]> {
+  const catalog = await initializeCatalog();
+  if (catalog.length === 0) return [];
+
+  const categoryFiltered = catalog.filter(
+    (product) =>
+      product.category?.toLowerCase().includes(category.toLowerCase()) ||
+      product["Product Type"]
+        ?.toString()
+        .toLowerCase()
+        .includes(category.toLowerCase()) ||
+      product["Class"]
+        ?.toString()
+        .toLowerCase()
+        .includes(category.toLowerCase())
+  );
+
+  const categoryFuse = new Fuse(categoryFiltered, fuseOptions);
+  const results = categoryFuse.search(query, { limit });
+
+  return results.map((result) => result.item);
+}
+
+// Price range search
+async function searchProductsByPriceRange(
+  minPrice: number,
+  maxPrice: number,
+  category?: string
+): Promise<Product[]> {
+  const catalog = await initializeCatalog();
+  if (catalog.length === 0) return [];
+
+  let filtered = catalog.filter((product) => {
+    const price =
+      typeof product.price === "number"
+        ? product.price
+        : parseFloat(String(product.price || "0"));
+    return price >= minPrice && price <= maxPrice;
+  });
+
+  if (category) {
+    filtered = filtered.filter((product) =>
+      product.category?.toLowerCase().includes(category.toLowerCase())
+    );
+  }
+
+  return filtered.sort((a, b) => (a.price || 0) - (b.price || 0));
+}
+
+// Brand-specific search
+async function searchProductsByBrand(
+  brandQuery: string,
+  limit: number = 20
+): Promise<Product[]> {
+  const catalog = await initializeCatalog();
+  if (catalog.length === 0) return [];
+
+  const brandResults = catalog.filter(
+    (product) =>
+      product.name?.toLowerCase().includes(brandQuery.toLowerCase()) ||
+      product.description?.toLowerCase().includes(brandQuery.toLowerCase())
+  );
+
+  return brandResults.slice(0, limit);
+}
+
+// Multi-field search for complex queries
+async function advancedSearch(params: {
+  query?: string;
+  category?: string;
+  brand?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  limit?: number;
+}): Promise<Product[]> {
+  const catalog = await initializeCatalog();
+  if (catalog.length === 0) return [];
+
+  let results = catalog;
+
+  // Filter by category if specified
+  if (params.category) {
+    results = results.filter(
+      (product) =>
+        product.category
+          ?.toLowerCase()
+          .includes(params.category!.toLowerCase()) ||
+        product["Product Type"]
+          ?.toString()
+          .toLowerCase()
+          .includes(params.category!.toLowerCase())
+    );
+  }
+
+  // Filter by brand if specified
+  if (params.brand) {
+    results = results.filter(
+      (product) =>
+        product.name?.toLowerCase().includes(params.brand!.toLowerCase()) ||
+        product.description?.toLowerCase().includes(params.brand!.toLowerCase())
+    );
+  }
+
+  // Filter by price range if specified
+  if (params.minPrice !== undefined || params.maxPrice !== undefined) {
+    results = results.filter((product) => {
+      const price =
+        typeof product.price === "number"
+          ? product.price
+          : parseFloat(String(product.price || "0"));
+      if (params.minPrice !== undefined && price < params.minPrice)
+        return false;
+      if (params.maxPrice !== undefined && price > params.maxPrice)
+        return false;
+      return true;
+    });
+  }
+
+  // Apply text search if query specified
+  if (params.query) {
+    const filteredFuse = new Fuse(results, fuseOptions);
+    const searchResults = filteredFuse.search(params.query, {
+      limit: params.limit || 10,
+    });
+    return searchResults.map((result) => result.item);
+  }
+
+  return results.slice(0, params.limit || 10);
+}
+
+// Export all search functions
+export {
+  searchProducts,
+  searchProductsByCategory,
+  searchProductsByPriceRange,
+  searchProductsByBrand,
+  advancedSearch,
+};
+
+----- Content End -----
+
 ===== File: lib/ai.ts =====
 Type: .ts
 ----- Content Start -----
 import OpenAI from "openai";
+import {
+  searchProducts,
+  searchProductsByCategory,
+  searchProductsByPriceRange,
+  searchProductsByBrand,
+  advancedSearch,
+} from "./search";
 
-type ProductCatalog = string;
+interface Product {
+  name: string;
+  model: string;
+  category: string;
+  price: number;
+  description: string;
+  [key: string]: unknown;
+}
+
+interface SearchResult {
+  products: Product[];
+  searchQueries: string[];
+  totalFound: number;
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+export async function searchAgentGatherProducts(
+  emailBody: string,
+  subject: string
+): Promise<SearchResult> {
+  const allFoundProducts = new Map<string, Product>();
+  const searchQueries: string[] = [];
+  const searchStrategies: string[] = [];
+  let iterations = 0;
+  const maxIterations = 12;
+
+  try {
+    while (iterations < maxIterations) {
+      iterations++;
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4.1-mini-2025-04-14",
+        response_format: { type: "json_object" },
+        messages: [
+          {
+            role: "system",
+            content: `You are an advanced product search agent with a critical mission: gather as much relevant product data as possible to enable a smarter LLM to respond to customer emails with maximum accuracy and completeness.
+
+Your primary goal is to collect comprehensive, relevant product information that will allow the final AI response to be highly accurate, detailed, and helpful.
+
+Available search strategies:
+1. "basic" - General text search across all product fields
+2. "category" - Search within specific product categories  
+3. "brand" - Brand-specific search
+4. "price_range" - Search by price range
+5. "advanced" - Multi-parameter search with filters
+6. "complementary" - Find accessories/items that complement already found products
+
+Your task: Choose ONE strategy and provide the parameters for that search.
+
+Consider:
+- Exact model numbers, brands, categories mentioned
+- Use cases (education, corporate, installation, etc.)
+- Price constraints or budget mentions
+- Accessories that complement main products found
+- Product relationships (projector → cases, mounts, cables)
+- Alternative products that might meet their needs
+- Related products that could enhance their setup
+- Products mentioned in similar contexts
+
+Current iteration: ${iterations}/${maxIterations}
+Products found so far: ${allFoundProducts.size}
+${
+  searchQueries.length > 0
+    ? `Previous searches: ${searchQueries.join(", ")}`
+    : ""
+}
+${
+  searchStrategies.length > 0
+    ? `Strategies used: ${searchStrategies.join(", ")}`
+    : ""
+}
+
+CRITICAL OBJECTIVES:
+- Gather comprehensive product data to enable highly accurate AI responses
+- Find ALL relevant products, not just the most obvious ones
+- Consider edge cases, alternatives, and complementary items
+- Think about what information the final AI will need to provide a complete response
+- Don't repeat the same search parameters
+- Consider what products we already found and what additional data would be valuable
+- Prioritize breadth and completeness over speed - accuracy depends on having all relevant data
+
+Respond with JSON based on chosen strategy:
+
+For "basic" strategy:
+{
+  "strategy": "basic",
+  "searchQuery": "search terms",
+  "reasoning": "why this query",
+  "isDone": boolean
+}
+
+For "category" strategy:
+{
+  "strategy": "category", 
+  "searchQuery": "search terms",
+  "category": "category name",
+  "reasoning": "why this category search",
+  "isDone": boolean
+}
+
+For "brand" strategy:
+{
+  "strategy": "brand",
+  "brandQuery": "brand name", 
+  "reasoning": "why this brand",
+  "isDone": boolean
+}
+
+For "price_range" strategy:
+{
+  "strategy": "price_range",
+  "minPrice": number,
+  "maxPrice": number,
+  "category": "optional category filter",
+  "reasoning": "why this price range",
+  "isDone": boolean
+}
+
+For "advanced" strategy:
+{
+  "strategy": "advanced",
+  "query": "optional text query",
+  "category": "optional category",
+  "brand": "optional brand",
+  "minPrice": "optional min price",
+  "maxPrice": "optional max price",
+  "reasoning": "why these specific filters",
+  "isDone": boolean
+}
+
+For "complementary" strategy:
+{
+  "strategy": "complementary",
+  "searchQuery": "accessories or complementary items",
+  "reasoning": "why these complement existing products",
+  "isDone": boolean
+}`,
+          },
+          {
+            role: "user",
+            content: `Customer Email Subject: ${subject}\n\nCustomer Email:\n${emailBody}
+
+${
+  allFoundProducts.size > 0
+    ? `\nProducts already found:\n${Array.from(allFoundProducts.values())
+        .slice(0, 5)
+        .map((p) => `- ${p.name} (${p.model})`)
+        .join("\n")}${
+        allFoundProducts.size > 5
+          ? `\n... and ${allFoundProducts.size - 5} more`
+          : ""
+      }`
+    : ""
+}`,
+          },
+        ],
+      });
+
+      const content = response.choices[0].message.content;
+      if (!content) break;
+
+      const result = JSON.parse(content);
+      let products: Product[] = [];
+      let searchDescription = "";
+
+      // Execute search based on chosen strategy
+      switch (result.strategy) {
+        case "basic":
+          if (
+            result.searchQuery &&
+            !searchQueries.includes(result.searchQuery)
+          ) {
+            searchQueries.push(result.searchQuery);
+            searchStrategies.push("basic");
+            products = await searchProducts(result.searchQuery, 12);
+            searchDescription = `Basic search: "${result.searchQuery}"`;
+          }
+          break;
+
+        case "category":
+          const categoryQuery = `${result.searchQuery} in ${result.category}`;
+          if (!searchQueries.includes(categoryQuery)) {
+            searchQueries.push(categoryQuery);
+            searchStrategies.push("category");
+            products = await searchProductsByCategory(
+              result.searchQuery,
+              result.category,
+              12
+            );
+            searchDescription = `Category search: "${result.searchQuery}" in ${result.category}`;
+          }
+          break;
+
+        case "brand":
+          if (
+            result.brandQuery &&
+            !searchQueries.includes(`brand:${result.brandQuery}`)
+          ) {
+            searchQueries.push(`brand:${result.brandQuery}`);
+            searchStrategies.push("brand");
+            products = await searchProductsByBrand(result.brandQuery, 15);
+            searchDescription = `Brand search: ${result.brandQuery}`;
+          }
+          break;
+
+        case "price_range":
+          const priceQuery = `price:${result.minPrice}-${result.maxPrice}${
+            result.category ? ` category:${result.category}` : ""
+          }`;
+          if (!searchQueries.includes(priceQuery)) {
+            searchQueries.push(priceQuery);
+            searchStrategies.push("price_range");
+            products = await searchProductsByPriceRange(
+              result.minPrice,
+              result.maxPrice,
+              result.category
+            );
+            searchDescription = `Price range: $${result.minPrice}-$${
+              result.maxPrice
+            }${result.category ? ` in ${result.category}` : ""}`;
+          }
+          break;
+
+        case "advanced":
+          const advancedQuery = `advanced:${JSON.stringify({
+            query: result.query,
+            category: result.category,
+            brand: result.brand,
+            minPrice: result.minPrice,
+            maxPrice: result.maxPrice,
+          })}`;
+          if (!searchQueries.includes(advancedQuery)) {
+            searchQueries.push(advancedQuery);
+            searchStrategies.push("advanced");
+            products = await advancedSearch({
+              query: result.query,
+              category: result.category,
+              brand: result.brand,
+              minPrice: result.minPrice,
+              maxPrice: result.maxPrice,
+              limit: 12,
+            });
+            searchDescription = `Advanced search with multiple filters`;
+          }
+          break;
+
+        case "complementary":
+          if (
+            result.searchQuery &&
+            !searchQueries.includes(`comp:${result.searchQuery}`)
+          ) {
+            searchQueries.push(`comp:${result.searchQuery}`);
+            searchStrategies.push("complementary");
+            products = await searchProducts(result.searchQuery, 10);
+            searchDescription = `Complementary search: "${result.searchQuery}"`;
+          }
+          break;
+
+        default:
+          console.log(`Unknown strategy: ${result.strategy}`);
+          break;
+      }
+
+      // Add found products to our collection (Map prevents duplicates by model)
+      if (products.length > 0) {
+        console.log(`${searchDescription} found ${products.length} products`);
+        products.forEach((product) => {
+          allFoundProducts.set(product.model, product);
+        });
+      }
+
+      // Enhanced stopping criteria - prioritize comprehensive data gathering
+      const shouldStop =
+        result.isDone ||
+        allFoundProducts.size >= 40 || // Increased from 25 to allow more comprehensive data
+        (iterations >= 8 && allFoundProducts.size >= 20) || // Increased iterations and threshold
+        (iterations >= 6 && products.length === 0); // Stop if no new products found after 6 iterations
+
+      if (shouldStop) {
+        console.log(
+          `Search agent stopping: isDone=${result.isDone}, products=${allFoundProducts.size}, iterations=${iterations}`
+        );
+        break;
+      }
+    }
+  } catch (error) {
+    console.error("Search agent error:", error);
+  }
+
+  console.log(
+    `Search agent completed: ${
+      allFoundProducts.size
+    } unique products found using strategies: ${[
+      ...new Set(searchStrategies),
+    ].join(", ")} - Comprehensive data gathered for accurate AI response`
+  );
+
+  return {
+    products: Array.from(allFoundProducts.values()),
+    searchQueries,
+    totalFound: allFoundProducts.size,
+  };
+}
+
+// Modified: Now uses search agent results
 export async function generateEmailResponse(
   emailBody: string,
-  subject: string,
-  productCatalog: ProductCatalog
+  subject: string
 ): Promise<string | null> {
   try {
+    // First, let search agent gather relevant products
+    const searchResult = await searchAgentGatherProducts(emailBody, subject);
+
+    console.log(
+      `Search agent found ${
+        searchResult.totalFound
+      } products with queries: ${searchResult.searchQueries.join(", ")}`
+    );
+
+    // Now use o3 (or your preferred smart model) for final response
     const response = await openai.chat.completions.create({
-      model: "o3-2025-04-16",
+      model: "o3-2025-04-16", // Using o3 for the smart response
       messages: [
         {
           role: "system",
-          content: `You are an AV equipment sales assistant. Analyze customer emails and respond with relevant product information and pricing from the catalog. Be professional and helpful.
+          content: `You are an expert AV equipment sales assistant. You have been provided with a curated selection of relevant products from our catalog based on the customer's inquiry.
 
-Product Catalog (CSV format):
-${productCatalog}
+Product Catalog (Pre-filtered and relevant):
+${JSON.stringify(searchResult.products, null, 2)}
 
-Guidelines:
-- If customer asks about specific products, provide exact matches
-- Include pricing and availability
-- Suggest compatible products when relevant
-- Keep responses professional and concise
-- If no exact match, suggest similar products
-- Always include pricing when available
-- Sign emails as "Best regards, The New York Marketing Team"`,
+Respond to the customer's inquiry in a helpful and professional email. Sign emails as "Best regards, The New York Marketing Team"
+
+Search context: Found ${
+            searchResult.totalFound
+          } relevant products using queries: ${searchResult.searchQueries.join(
+            ", "
+          )}`,
         },
         {
           role: "user",
@@ -48,27 +642,33 @@ Guidelines:
   }
 }
 
+// Modified: Now uses search agent for upsells
 export async function generateUpsellResponse(
   emailBody: string,
-  subject: string,
-  productCatalog: ProductCatalog
+  subject: string
 ): Promise<string | null> {
   try {
+    // Search for products related to their purchase + complementary items
+    const searchResult = await searchAgentGatherProducts(emailBody, subject);
+
+    console.log(`Upsell search found ${searchResult.totalFound} products`);
+
     const response = await openai.chat.completions.create({
       model: "o3-2025-04-16",
       messages: [
         {
           role: "system",
-          content: `You are an AV equipment sales assistant. Analyze purchase orders and suggest highly relevant complementary products for professional AV installations.
+          content: `You are an expert AV equipment sales assistant specializing in complementary product recommendations.
 
-Product Catalog (CSV format):
-${productCatalog}
+Relevant Products (Pre-filtered based on their purchase):
+${JSON.stringify(searchResult.products, null, 2)}
 
 Guidelines:
-- Only suggest products that are genuinely complementary to their purchase
-- Keep suggestions to 2-3 most relevant items
+- Analyze their purchase and suggest 2-3 genuinely complementary products
+- Focus on items that complete their setup or solve common problems
 - Include brief explanation of why each item is recommended
-- Be professional and helpful, not pushy
+- Be helpful, not pushy - focus on value
+- Include pricing and model numbers
 - Sign emails as "Best regards, The New York Marketing Team"`,
         },
         {
@@ -610,15 +1210,114 @@ export { handler as GET, handler as POST };
 Type: .ts
 ----- Content Start -----
 import { setupDatabase } from "@/lib/db";
+import {
+  searchProducts,
+  searchProductsByBrand,
+  searchProductsByCategory,
+  searchProductsByPriceRange,
+  advancedSearch,
+} from "@/lib/search";
 import { NextResponse } from "next/server";
 
 export async function POST() {
   try {
     await setupDatabase();
 
+    // Test search functionality
+    console.log("Testing search functionality...");
+
+    // Test 1: Basic search for EPSON products
+    const epsonResults = await searchProducts("EPSON", 3);
+    console.log(`Found ${epsonResults.length} EPSON products`);
+
+    // Test 2: Brand search for EPSON
+    const brandResults = await searchProductsByBrand("EPSON", 3);
+    console.log(`Found ${brandResults.length} EPSON brand products`);
+
+    // Test 3: Category search for projector accessories
+    const categoryResults = await searchProductsByCategory(
+      "projector",
+      "ACCESSORIES",
+      3
+    );
+    console.log(`Found ${categoryResults.length} projector accessories`);
+
+    // Test 4: Price range search for accessories under $100
+    const priceResults = await searchProductsByPriceRange(
+      0,
+      100,
+      "ACCESSORIES"
+    );
+    console.log(`Found ${priceResults.length} accessories under $100`);
+
+    // Test 5: Advanced search for cases in accessories $20-$100
+    const advancedResults = await advancedSearch({
+      query: "case",
+      category: "ACCESSORIES",
+      minPrice: 20,
+      maxPrice: 100,
+      limit: 3,
+    });
+    console.log(
+      `Found ${advancedResults.length} cases in accessories $20-$100`
+    );
+
     return NextResponse.json({
       success: true,
       message: "Database tables created successfully",
+      searchTest: {
+        basicSearch: {
+          query: "EPSON",
+          results: epsonResults.length,
+          sampleProducts: epsonResults.slice(0, 2).map((p) => ({
+            name: p.name,
+            model: p.model,
+            price: p.price,
+          })),
+        },
+        brandSearch: {
+          query: "EPSON",
+          results: brandResults.length,
+          sampleProducts: brandResults.slice(0, 2).map((p) => ({
+            name: p.name,
+            model: p.model,
+            price: p.price,
+          })),
+        },
+        categorySearch: {
+          query: "projector",
+          category: "ACCESSORIES",
+          results: categoryResults.length,
+          sampleProducts: categoryResults.slice(0, 2).map((p) => ({
+            name: p.name,
+            model: p.model,
+            price: p.price,
+          })),
+        },
+        priceRangeSearch: {
+          minPrice: 0,
+          maxPrice: 100,
+          category: "ACCESSORIES",
+          results: priceResults.length,
+          sampleProducts: priceResults.slice(0, 2).map((p) => ({
+            name: p.name,
+            model: p.model,
+            price: p.price,
+          })),
+        },
+        advancedSearch: {
+          query: "case",
+          category: "ACCESSORIES",
+          minPrice: 20,
+          maxPrice: 100,
+          results: advancedResults.length,
+          sampleProducts: advancedResults.slice(0, 2).map((p) => ({
+            name: p.name,
+            model: p.model,
+            price: p.price,
+          })),
+        },
+      },
     });
   } catch (error) {
     console.error("Database setup error:", error);
@@ -650,8 +1349,6 @@ import {
 } from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
-import fs from "fs";
-import path from "path";
 
 // Type definitions
 interface User {
@@ -663,13 +1360,6 @@ interface User {
 }
 
 type EmailData = gmail_v1.Schema$Message;
-
-// Load product catalog
-const getProductCatalog = () => {
-  const catalogPath = path.join(process.cwd(), "data/av_products.csv");
-  const catalogData = fs.readFileSync(catalogPath, "utf8");
-  return catalogData;
-};
 
 export async function POST(request: Request) {
   try {
@@ -801,13 +1491,8 @@ async function processEmail(
       console.log(
         "Email identified as purchase order by AI - generating upsell"
       );
-      const productCatalog = getProductCatalog();
 
-      const upsellResponse = await generateUpsellResponse(
-        emailBody,
-        subject,
-        productCatalog
-      );
+      const upsellResponse = await generateUpsellResponse(emailBody, subject);
 
       if (upsellResponse) {
         await sendReply(gmail, email.data, upsellResponse);
@@ -816,13 +1501,8 @@ async function processEmail(
       }
     } else if (emailType === "product_inquiry") {
       console.log("Email identified as product inquiry by AI");
-      const productCatalog = getProductCatalog();
 
-      const aiResponse = await generateEmailResponse(
-        emailBody,
-        subject,
-        productCatalog
-      );
+      const aiResponse = await generateEmailResponse(emailBody, subject);
 
       if (aiResponse) {
         await sendReply(gmail, email.data, aiResponse);
