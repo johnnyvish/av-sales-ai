@@ -4,7 +4,7 @@ import {
   isEmailProcessed,
   markEmailAsProcessed,
 } from "@/lib/db";
-import { generateEmailResponse } from "@/lib/ai";
+import { generateEmailResponse, isProductInquiryAI } from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
 import fs from "fs";
@@ -151,9 +151,11 @@ async function processEmail(
       return;
     }
 
-    // Check if this looks like a product inquiry
-    if (isProductInquiry(emailBody)) {
-      console.log("Email identified as product inquiry");
+    // Check if this looks like a product inquiry using AI
+    const isInquiry = await isProductInquiryAI(emailBody, subject);
+
+    if (isInquiry) {
+      console.log("Email identified as product inquiry by AI");
       const productCatalog = getProductCatalog();
 
       // Use AI to analyze email and generate response
@@ -173,7 +175,7 @@ async function processEmail(
         console.log("Email processed and reply sent successfully");
       }
     } else {
-      console.log("Email not identified as product inquiry, skipping");
+      console.log("Email not identified as product inquiry by AI, skipping");
       // Still mark as processed to avoid reprocessing
       await markEmailAsProcessed(messageId, user.id);
     }
@@ -211,29 +213,6 @@ function getEmailSubject(emailData: EmailData): string {
 function getFromEmail(emailData: EmailData): string {
   const fromHeader = emailData.payload?.headers?.find((h) => h.name === "From");
   return fromHeader?.value || "";
-}
-
-function isProductInquiry(emailBody: string): boolean {
-  const inquiryKeywords = [
-    "price",
-    "cost",
-    "available",
-    "stock",
-    "do you have",
-    "quote",
-    "rx",
-    "projector",
-    "epson",
-    "avpro",
-    "hdmi",
-    "video",
-    "theater",
-    "installation",
-    "equipment",
-  ];
-
-  const lowerBody = emailBody.toLowerCase();
-  return inquiryKeywords.some((keyword) => lowerBody.includes(keyword));
 }
 
 async function sendReply(

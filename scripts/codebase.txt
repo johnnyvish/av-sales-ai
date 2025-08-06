@@ -1,0 +1,995 @@
+===== File: lib/ai.ts =====
+Type: .ts
+----- Content Start -----
+import OpenAI from "openai";
+
+interface ProductCatalog {
+  [key: string]: unknown;
+}
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+export async function generateEmailResponse(
+  emailBody: string,
+  subject: string,
+  productCatalog: ProductCatalog
+): Promise<string | null> {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4.1-mini-2025-04-14",
+      messages: [
+        {
+          role: "system",
+          content: `You are an AV equipment sales assistant. Analyze customer emails and respond with relevant product information and pricing from the catalog. Be professional and helpful.
+
+Product Catalog:
+${JSON.stringify(productCatalog, null, 2)}
+
+Guidelines:
+- If customer asks about specific products, provide exact matches
+- Include pricing and availability
+- Suggest compatible products when relevant
+- Keep responses professional and concise
+- If no exact match, suggest similar products
+- Always include pricing when available
+- Sign emails as "Best regards, AV Sales Team"`,
+        },
+        {
+          role: "user",
+          content: `Customer Email Subject: ${subject}\n\nCustomer Email:\n${emailBody}`,
+        },
+      ],
+    });
+
+    return response.choices[0].message.content;
+  } catch (error) {
+    console.error("AI response generation error:", error);
+    return null;
+  }
+}
+
+export async function isProductInquiryAI(
+  emailBody: string,
+  subject: string
+): Promise<boolean> {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4.1-mini-2025-04-14",
+      response_format: { type: "json_object" },
+      messages: [
+        {
+          role: "system",
+          content: `Determine if an email is a product inquiry for AV equipment sales.
+
+Product inquiries include: pricing, availability, quotes, specifications, recommendations, installation, or technical support for AV equipment.
+
+Non-inquiries: thank you messages, shipping status, complaints, general business questions.
+
+Respond with JSON: {"isProductInquiry": boolean}`,
+        },
+        {
+          role: "user",
+          content: `Email Subject: ${subject}\n\nEmail Body:\n${emailBody}`,
+        },
+      ],
+    });
+
+    const content = response.choices[0].message.content;
+    if (!content) {
+      console.error("No content in AI response");
+      return false;
+    }
+
+    const result = JSON.parse(content);
+    return result.isProductInquiry === true;
+  } catch (error) {
+    console.error("AI product inquiry detection error:", error);
+    // Fallback to false to avoid processing non-inquiries
+    return false;
+  }
+}
+
+----- Content End -----
+
+===== File: lib/db.ts =====
+Type: .ts
+----- Content Start -----
+import { Pool } from "pg";
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
+});
+
+// Test connection on startup
+pool.on("connect", () => {
+  console.log("Connected to PostgreSQL database");
+});
+
+pool.on("error", (err) => {
+  console.error("Database connection error:", err);
+});
+
+// Database operation functions
+export async function getUserWithAutomation(email: string) {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      "SELECT * FROM users WHERE email = $1 AND automation_enabled = true",
+      [email]
+    );
+    return result.rows[0] || null;
+  } finally {
+    client.release();
+  }
+}
+
+export async function isEmailProcessed(emailId: string) {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      "SELECT id FROM processed_emails WHERE email_id = $1",
+      [emailId]
+    );
+    return result.rows.length > 0;
+  } finally {
+    client.release();
+  }
+}
+
+export async function markEmailAsProcessed(emailId: string, userId: number) {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "INSERT INTO processed_emails (email_id, user_id) VALUES ($1, $2)",
+      [emailId, userId]
+    );
+  } finally {
+    client.release();
+  }
+}
+
+export async function updateUserAutomation(email: string, enabled: boolean) {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "UPDATE users SET automation_enabled = $1 WHERE email = $2",
+      [enabled, email]
+    );
+  } finally {
+    client.release();
+  }
+}
+
+export async function getUserByGoogleId(googleId: string) {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      "SELECT * FROM users WHERE google_id = $1",
+      [googleId]
+    );
+    return result.rows[0] || null;
+  } finally {
+    client.release();
+  }
+}
+
+export async function createUser(
+  email: string,
+  googleId: string,
+  accessToken: string,
+  refreshToken: string
+) {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "INSERT INTO users (email, google_id, access_token, refresh_token) VALUES ($1, $2, $3, $4)",
+      [email, googleId, accessToken, refreshToken]
+    );
+  } finally {
+    client.release();
+  }
+}
+
+export async function updateUserTokens(
+  googleId: string,
+  accessToken: string,
+  refreshToken: string
+) {
+  const client = await pool.connect();
+  try {
+    await client.query(
+      "UPDATE users SET access_token = $1, refresh_token = $2 WHERE google_id = $3",
+      [accessToken, refreshToken, googleId]
+    );
+  } finally {
+    client.release();
+  }
+}
+
+export async function getUserByEmail(email: string) {
+  const client = await pool.connect();
+  try {
+    const result = await client.query(
+      "SELECT id, automation_enabled FROM users WHERE email = $1",
+      [email]
+    );
+    return result.rows[0] || null;
+  } finally {
+    client.release();
+  }
+}
+
+export async function setupDatabase() {
+  const client = await pool.connect();
+  try {
+    // Create users table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        google_id VARCHAR(255) UNIQUE NOT NULL,
+        access_token TEXT,
+        refresh_token TEXT,
+        automation_enabled BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create processed emails table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS processed_emails (
+        id SERIAL PRIMARY KEY,
+        email_id VARCHAR(255) UNIQUE NOT NULL,
+        user_id INTEGER REFERENCES users(id),
+        processed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+  } finally {
+    client.release();
+  }
+}
+
+export async function getUserTokens(email: string) {
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      "SELECT access_token, refresh_token FROM users WHERE email = $1",
+      [email]
+    );
+    client.release();
+
+    return result.rows.length > 0 ? result.rows[0] : null;
+  } catch (error) {
+    console.error("Error getting user tokens:", error);
+    return null;
+  }
+}
+
+export default pool;
+
+----- Content End -----
+
+===== File: lib/auth.ts =====
+Type: .ts
+----- Content Start -----
+import GoogleProvider from "next-auth/providers/google";
+import {
+  getUserByGoogleId,
+  createUser,
+  updateUserTokens,
+  getUserByEmail,
+} from "@/lib/db";
+import { NextAuthOptions, DefaultSession } from "next-auth";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id?: string;
+      automationEnabled?: boolean;
+    } & DefaultSession["user"];
+  }
+}
+
+export const authOptions: NextAuthOptions = {
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          scope:
+            "openid email profile https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send",
+        },
+      },
+    }),
+  ],
+  callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        try {
+          // Check if user exists
+          const existingUser = await getUserByGoogleId(
+            account.providerAccountId
+          );
+
+          if (!existingUser) {
+            // Create new user
+            await createUser(
+              user.email!,
+              account.providerAccountId,
+              account.access_token!,
+              account.refresh_token!
+            );
+          } else {
+            // Update existing user tokens
+            await updateUserTokens(
+              account.providerAccountId,
+              account.access_token!,
+              account.refresh_token!
+            );
+          }
+
+          return true;
+        } catch (error) {
+          console.error("Database error during sign in:", error);
+          return false;
+        }
+      }
+      return true;
+    },
+    async session({ session }) {
+      // Add user database info to session
+      try {
+        const user = await getUserByEmail(session.user?.email || "");
+
+        if (user && session.user) {
+          session.user.id = user.id;
+          session.user.automationEnabled = user.automation_enabled;
+        }
+      } catch (error) {
+        console.error("Session callback error:", error);
+      }
+
+      return session;
+    },
+  },
+};
+
+----- Content End -----
+
+===== File: app/layout.tsx =====
+Type: .tsx
+----- Content Start -----
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import SessionWrapper from "@/components/SessionWrapper";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "AV Automation",
+  description: "AV Automation",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <SessionWrapper>{children}</SessionWrapper>
+      </body>
+    </html>
+  );
+}
+
+----- Content End -----
+
+===== File: app/page.tsx =====
+Type: .tsx
+----- Content Start -----
+"use client";
+
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useState, useEffect } from "react";
+
+export default function HomePage() {
+  const { data: session, status, update } = useSession();
+  const [automationEnabled, setAutomationEnabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Load automation status when session loads
+  useEffect(() => {
+    if (session?.user?.automationEnabled !== undefined) {
+      setAutomationEnabled(session.user.automationEnabled);
+    }
+  }, [session]);
+
+  const toggleAutomation = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/toggle-automation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ enabled: !automationEnabled }),
+      });
+
+      if (response.ok) {
+        setAutomationEnabled(!automationEnabled);
+        // Update the session to reflect new status
+        await update();
+      } else {
+        console.error("Failed to toggle automation");
+      }
+    } catch (error) {
+      console.error("Error toggling automation:", error);
+    }
+    setLoading(false);
+  };
+
+  if (status === "loading") {
+    return <div className="p-8">Loading...</div>;
+  }
+
+  if (!session) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              AV Equipment Automation
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Sign in with Google to manage your email automation
+            </p>
+          </div>
+          <button
+            onClick={() => signIn("google")}
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Sign in with Google
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="px-4 py-6 sm:px-0">
+          <div className="border-4 border-dashed border-gray-200 rounded-lg p-8">
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  AV Equipment Email Automation
+                </h1>
+                <p className="text-gray-600">Welcome, {session.user.email}</p>
+              </div>
+              <button
+                onClick={() => signOut()}
+                className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Sign Out
+              </button>
+            </div>
+
+            <div className="bg-white shadow rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-medium text-gray-900">
+                    Email Automation
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    {automationEnabled
+                      ? "Automation is active - AI will respond to incoming emails"
+                      : "Automation is disabled - emails will not be processed"}
+                  </p>
+                </div>
+                <div className="flex items-center">
+                  <button
+                    onClick={toggleAutomation}
+                    disabled={loading}
+                    className={`${
+                      automationEnabled ? "bg-green-600" : "bg-gray-200"
+                    } relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+                      loading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    <span
+                      className={`${
+                        automationEnabled ? "translate-x-5" : "translate-x-0"
+                      } pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`}
+                    />
+                  </button>
+                  <span className="ml-3 text-sm font-medium text-gray-900">
+                    {automationEnabled ? "ON" : "OFF"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+----- Content End -----
+
+===== File: app/globals.css =====
+Type: .css
+----- Content Start -----
+@import "tailwindcss";
+
+----- Content End -----
+
+===== File: app/api/auth/[...nextauth]/route.ts =====
+Type: .ts
+----- Content Start -----
+import NextAuth from "next-auth";
+import { authOptions } from "@/lib/auth";
+
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
+
+----- Content End -----
+
+===== File: app/api/setup-db/route.ts =====
+Type: .ts
+----- Content Start -----
+import { setupDatabase } from "@/lib/db";
+import { NextResponse } from "next/server";
+
+export async function POST() {
+  try {
+    await setupDatabase();
+
+    return NextResponse.json({
+      success: true,
+      message: "Database tables created successfully",
+    });
+  } catch (error) {
+    console.error("Database setup error:", error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+----- Content End -----
+
+===== File: app/api/gmail-webhook/route.ts =====
+Type: .ts
+----- Content Start -----
+import { NextResponse } from "next/server";
+import {
+  getUserWithAutomation,
+  isEmailProcessed,
+  markEmailAsProcessed,
+} from "@/lib/db";
+import { generateEmailResponse, isProductInquiryAI } from "@/lib/ai";
+import { google } from "googleapis";
+import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
+import fs from "fs";
+import path from "path";
+
+// Type definitions
+interface User {
+  id: number;
+  email: string;
+  access_token: string;
+  refresh_token: string;
+  automation_enabled: boolean;
+}
+
+type EmailData = gmail_v1.Schema$Message;
+
+// Load product catalog
+const getProductCatalog = () => {
+  const catalogPath = path.join(process.cwd(), "data/products.json");
+  const catalogData = fs.readFileSync(catalogPath, "utf8");
+  return JSON.parse(catalogData);
+};
+
+export async function POST(request: Request) {
+  try {
+    // Parse Pub/Sub message format
+    const body = await request.json();
+    console.log("Pub/Sub webhook received:", body);
+
+    // Pub/Sub sends messages in this format:
+    // { message: { data: base64EncodedData, attributes: {}, messageId: "", publishTime: "" } }
+    if (body.message && body.message.data) {
+      // Decode the Pub/Sub message data
+      const pubsubData = JSON.parse(
+        Buffer.from(body.message.data, "base64").toString()
+      );
+
+      console.log("Decoded Pub/Sub data:", pubsubData);
+
+      // Gmail Pub/Sub notification contains: { emailAddress, historyId }
+      const { emailAddress } = pubsubData;
+
+      if (!emailAddress) {
+        console.log("No emailAddress in Pub/Sub message");
+        return NextResponse.json({ message: "No email address provided" });
+      }
+
+      // Get user from database
+      const user = await getUserWithAutomation(emailAddress);
+
+      if (!user) {
+        console.log(
+          `User not found or automation disabled for: ${emailAddress}`
+        );
+        return NextResponse.json({
+          message: "User not found or automation disabled",
+        });
+      }
+
+      console.log(`Processing emails for user: ${emailAddress}`);
+
+      // Set up Gmail API
+      const oauth2Client = new google.auth.OAuth2(
+        process.env.GOOGLE_CLIENT_ID,
+        process.env.GOOGLE_CLIENT_SECRET
+      );
+
+      oauth2Client.setCredentials({
+        access_token: user.access_token,
+        refresh_token: user.refresh_token,
+      });
+
+      const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+      // Get recent unread messages
+      const response = await gmail.users.messages.list({
+        userId: "me",
+        maxResults: 10,
+        q: "is:unread",
+      });
+
+      console.log(
+        `Found ${response.data.messages?.length || 0} unread messages`
+      );
+
+      if (response.data.messages) {
+        for (const message of response.data.messages) {
+          if (!message.id) continue;
+
+          // Check if we've already processed this email
+          const isProcessed = await isEmailProcessed(message.id);
+
+          if (!isProcessed) {
+            console.log(`Processing new email: ${message.id}`);
+            // Process this new email
+            await processEmail(gmail, message.id, user);
+          } else {
+            console.log(`Email already processed: ${message.id}`);
+          }
+        }
+      }
+    }
+
+    // Always return 200 OK to acknowledge the Pub/Sub message
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Pub/Sub webhook error:", error);
+    // Still return 200 to avoid Pub/Sub retries on permanent failures
+    return NextResponse.json(
+      {
+        error:
+          error instanceof Error ? error.message : "Webhook processing failed",
+      },
+      { status: 200 }
+    );
+  }
+}
+
+async function processEmail(
+  gmail: gmail_v1.Gmail,
+  messageId: string,
+  user: User
+) {
+  try {
+    // Get email content
+    const email = await gmail.users.messages.get({
+      userId: "me",
+      id: messageId,
+      format: "full",
+    });
+
+    const emailBody = extractEmailBody(email.data);
+    const subject = getEmailSubject(email.data);
+    const fromEmail = getFromEmail(email.data);
+
+    console.log("Processing email:", subject);
+    console.log("From:", fromEmail);
+    console.log("Email body preview:", emailBody.substring(0, 200) + "...");
+
+    // Skip emails from the user themselves (avoid loops)
+    if (fromEmail && fromEmail.includes(user.email)) {
+      console.log("Skipping email from self");
+      await markEmailAsProcessed(messageId, user.id);
+      return;
+    }
+
+    // Check if this looks like a product inquiry using AI
+    const isInquiry = await isProductInquiryAI(emailBody, subject);
+
+    if (isInquiry) {
+      console.log("Email identified as product inquiry by AI");
+      const productCatalog = getProductCatalog();
+
+      // Use AI to analyze email and generate response
+      const aiResponse = await generateEmailResponse(
+        emailBody,
+        subject,
+        productCatalog
+      );
+
+      if (aiResponse) {
+        // Send reply
+        await sendReply(gmail, email.data, aiResponse);
+
+        // Mark as processed
+        await markEmailAsProcessed(messageId, user.id);
+
+        console.log("Email processed and reply sent successfully");
+      }
+    } else {
+      console.log("Email not identified as product inquiry by AI, skipping");
+      // Still mark as processed to avoid reprocessing
+      await markEmailAsProcessed(messageId, user.id);
+    }
+  } catch (error) {
+    console.error("Error processing email:", error);
+    // Mark as processed even on error to avoid infinite retries
+    await markEmailAsProcessed(messageId, user.id);
+  }
+}
+
+function extractEmailBody(emailData: EmailData): string {
+  // Extract text from email body
+  let body = "";
+
+  if (emailData.payload?.body?.data) {
+    body = Buffer.from(emailData.payload.body.data, "base64").toString();
+  } else if (emailData.payload?.parts) {
+    for (const part of emailData.payload.parts) {
+      if (part.mimeType === "text/plain" && part.body?.data) {
+        body += Buffer.from(part.body.data, "base64").toString();
+      }
+    }
+  }
+
+  return body;
+}
+
+function getEmailSubject(emailData: EmailData): string {
+  const subjectHeader = emailData.payload?.headers?.find(
+    (h) => h.name === "Subject"
+  );
+  return subjectHeader?.value || "";
+}
+
+function getFromEmail(emailData: EmailData): string {
+  const fromHeader = emailData.payload?.headers?.find((h) => h.name === "From");
+  return fromHeader?.value || "";
+}
+
+async function sendReply(
+  gmail: gmail_v1.Gmail,
+  originalEmail: EmailData,
+  replyContent: string
+): Promise<void> {
+  try {
+    const subject = getEmailSubject(originalEmail);
+    const fromHeader = originalEmail.payload?.headers?.find(
+      (h) => h.name === "From"
+    );
+    if (!fromHeader) {
+      throw new Error("From header not found in email");
+    }
+    const toEmail = fromHeader.value;
+
+    const replySubject = subject.startsWith("Re:") ? subject : `Re: ${subject}`;
+
+    const emailLines = [
+      `To: ${toEmail}`,
+      `Subject: ${replySubject}`,
+      `In-Reply-To: ${originalEmail.id}`,
+      `References: ${originalEmail.id}`,
+      "",
+      replyContent,
+    ];
+
+    const email = emailLines.join("\n");
+    const encodedEmail = Buffer.from(email).toString("base64url");
+
+    await gmail.users.messages.send({
+      userId: "me",
+      requestBody: {
+        raw: encodedEmail,
+      },
+    });
+
+    console.log("Reply sent successfully");
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    throw error;
+  }
+}
+
+----- Content End -----
+
+===== File: app/api/toggle-automation/route.ts =====
+Type: .ts
+----- Content Start -----
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/lib/auth";
+import { updateUserAutomation, getUserTokens } from "@/lib/db";
+import { google } from "googleapis";
+import { NextResponse } from "next/server";
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { enabled } = await request.json();
+
+    // Update automation status in database
+    await updateUserAutomation(session.user.email!, enabled);
+
+    // Handle Gmail watch based on automation status
+    if (enabled) {
+      // Enable Gmail watch
+      const watchResult = await enableGmailWatch(session.user.email!);
+      if (!watchResult.success) {
+        console.error("Failed to enable Gmail watch:", watchResult.error);
+        // Don't fail the whole request, just log the error
+      }
+    } else {
+      // Disable Gmail watch
+      const stopResult = await disableGmailWatch(session.user.email!);
+      if (!stopResult.success) {
+        console.error("Failed to disable Gmail watch:", stopResult.error);
+        // Don't fail the whole request, just log the error
+      }
+    }
+
+    return NextResponse.json({ success: true, enabled });
+  } catch (error) {
+    console.error("Toggle automation error:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+async function enableGmailWatch(email: string) {
+  try {
+    // Get user tokens
+    const tokens = await getUserTokens(email);
+    if (!tokens) {
+      return { success: false, error: "User tokens not found" };
+    }
+
+    // Set up Gmail API
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET
+    );
+
+    oauth2Client.setCredentials({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+    });
+
+    const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+    // Enable Gmail watch
+    const response = await gmail.users.watch({
+      userId: "me",
+      requestBody: {
+        topicName: "projects/finao-468122/topics/gmail-notifications",
+        labelIds: ["INBOX"],
+      },
+    });
+
+    console.log("Gmail watch enabled for:", email, response.data);
+    return { success: true, data: response.data };
+  } catch (error) {
+    console.error("Error enabling Gmail watch:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+async function disableGmailWatch(email: string) {
+  try {
+    // Get user tokens
+    const tokens = await getUserTokens(email);
+    if (!tokens) {
+      return { success: false, error: "User tokens not found" };
+    }
+
+    // Set up Gmail API
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET
+    );
+
+    oauth2Client.setCredentials({
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+    });
+
+    const gmail = google.gmail({ version: "v1", auth: oauth2Client });
+
+    // Stop Gmail watch
+    await gmail.users.stop({
+      userId: "me",
+    });
+
+    console.log("Gmail watch disabled for:", email);
+    return { success: true };
+  } catch (error) {
+    console.error("Error disabling Gmail watch:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+----- Content End -----
+
+===== File: components/SessionWrapper.tsx =====
+Type: .tsx
+----- Content Start -----
+"use client";
+
+import { SessionProvider } from "next-auth/react";
+import { ReactNode } from "react";
+
+export default function SessionWrapper({ children }: { children: ReactNode }) {
+  return <SessionProvider>{children}</SessionProvider>;
+}
+
+----- Content End -----
+
