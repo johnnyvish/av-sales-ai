@@ -4,11 +4,7 @@ import {
   isEmailProcessed,
   markEmailAsProcessed,
 } from "@/lib/db";
-import {
-  generateEmailResponse,
-  classifyEmailType,
-  generateUpsellResponse,
-} from "@/lib/ai";
+import { generateResponse, shouldRespondToEmail } from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
 
@@ -182,25 +178,13 @@ async function processEmail(
       return;
     }
 
-    // Classify email type using single AI call
-    const emailType = await classifyEmailType(emailBody, subject);
+    // Check if we should respond to this email
+    const shouldRespond = await shouldRespondToEmail(emailBody, subject);
 
-    if (emailType === "purchase_order") {
-      console.log(
-        "Email identified as purchase order by AI - generating upsell"
-      );
+    if (shouldRespond) {
+      console.log("Email identified as AV-related - generating response");
 
-      const upsellResponse = await generateUpsellResponse(emailBody, subject);
-
-      if (upsellResponse) {
-        await sendReply(gmail, email.data, upsellResponse);
-        await markEmailAsProcessed(messageId, user.id);
-        console.log("Purchase order processed and upsell sent successfully");
-      }
-    } else if (emailType === "product_inquiry") {
-      console.log("Email identified as product inquiry by AI");
-
-      const aiResponse = await generateEmailResponse(emailBody, subject);
+      const aiResponse = await generateResponse(emailBody, subject);
 
       if (aiResponse) {
         await sendReply(gmail, email.data, aiResponse);
@@ -208,9 +192,7 @@ async function processEmail(
         console.log("Email processed and reply sent successfully");
       }
     } else {
-      console.log(
-        "Email not identified as product inquiry or purchase order, skipping"
-      );
+      console.log("Email not identified as AV-related, skipping");
       await markEmailAsProcessed(messageId, user.id);
     }
   } catch (error) {
