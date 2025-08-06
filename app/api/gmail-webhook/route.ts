@@ -27,9 +27,9 @@ type EmailData = gmail_v1.Schema$Message;
 
 // Load product catalog
 const getProductCatalog = () => {
-  const catalogPath = path.join(process.cwd(), "data/products.json");
+  const catalogPath = path.join(process.cwd(), "data/av_products.csv");
   const catalogData = fs.readFileSync(catalogPath, "utf8");
-  return JSON.parse(catalogData);
+  return catalogData;
 };
 
 export async function POST(request: Request) {
