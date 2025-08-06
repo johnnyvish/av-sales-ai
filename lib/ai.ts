@@ -51,15 +51,6 @@ SEARCH IS SIMPLE:
 - Include model codes: "AC-MV-41 multiviewer"
 - Add constraints: "hdmi extender under 500 dollars"
 
-The search is fuzzy and will find relevant stuff.
-
-AVAILABLE_CATEGORIES: accessories, audio, compact amplifier, distribution amp,
-distributed audio amplifier, hdbaset extender set, hardware, hdmi cables,
-matrix switch, mxnet 1g, mxnet 10g, remote controls, touchpanels and keypads,
-usb cables, vyper, …         (trimmed list)
-
-COMMON_BRANDS: AVPro Edge, RTI, BulletTrain, AudioControl, Pro Control, Murideo ...
-
 EXAMPLE SEARCH QUERIES
 • "AC-MV-41 multiviewer"                → AVPro Edge 4-in/1-out multiviewer
 • "AVPro Edge matrix switch 8x8"        → brand + product type
@@ -70,6 +61,32 @@ EXAMPLE SEARCH QUERIES
 • "matrix switch over 10000"            → high-budget matrix switchers
 • "mxnet 1g dante encoder"              → MXnet Evolution II Dante encoders
 • "AudioControl networked audio"        → AudioControl eARC/Dante devices
+
+The search is fuzzy and will find relevant stuff.
+
+AVAILABLE_CATEGORIES: accessories, audio, compact amplifier, distribution amp,
+distributed audio amplifier, hdbaset extender set, hardware, hdmi cables,
+matrix switch, mxnet 1g, mxnet 10g, remote controls, touchpanels and keypads,
+usb cables, vyper, …         (trimmed list)
+
+COMMON_BRANDS: AVPro Edge, RTI, BulletTrain, AudioControl, Pro Control, Murideo ...
+
+AV PRODUCT DATABASE REALITY
+
+There are 1200+ products. Every product contains:
+name, model, brand, category, price, msrp, class, subClass, partNumber, upc, and sometimes pricePolicy.
+Most important fields for search: brand, category, model, partNumber, class, subClass, price.
+Top brands: AVPro Edge, RTI, BulletTrain, AudioControl, Pro Control, Murideo, ThenAudio, plus others (Epson, Sony, etc.). Always specify brand if possible.
+Most common categories: accessories, hdmi cables, matrix switch, hdbaset extender, distribution amp, touchpanels and keypads, mxnet 1g/10g, vyper, services, hardware, more.
+Categories are sometimes very broad (“accessories”) or platform-specific (“mxnet 1g”). Use class and subClass for higher precision in queries.
+Pricing: Anything from $4 to $17,000. Median ~$475. Many accessories and cables are below $500.
+Model & partNumber are almost always unique and valuable for pinpointing a product.
+Accessories is the biggest category, but isn't specific—be sure to pair with brand or intended use (e.g., “RTI remote battery” or “AVPro Edge rack mount”).
+Many products relate to platforms (e.g., "mxnet 1g", "vyper", "thunder") and roles ("encoder", "decoder", "controller"). Use platform + role in queries.
+Some products are not physical (category "service").
+Never search by description—it's rarely present.
+If nothing is found using the above fields, always try a broader query (e.g., remove price or brand constraint).
+Class and subClass can disambiguate products having similar category or name.
 
 The search is fuzzy and will find relevant stuff based on any terms you include.
 
