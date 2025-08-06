@@ -94,15 +94,7 @@ completion, and grade your confidence (1-10).
 
 Respond only in JSON:
 { "searchQuery": "...", "reasoning": "...", "isDone": false, "confidence": 7 }
-
-Your vector store is available to you as well, which includes the entire product catalog. Don't be afraid to use it.
 `,
-        tools: [
-          {
-            type: "file_search",
-            vector_store_ids: ["vs_689305fcf35c8191a3f7ad8143faf180"],
-          },
-        ],
         input: `
 
 Current iteration: ${iterations}/${maxIterations}
@@ -255,8 +247,10 @@ No specific products found by search agent for this inquiry. Use your vector sto
 
 You also have access to the complete product catalog through your vector store. Use it to find additional relevant products that match the customer's inquiry.
 
-Make your response short and concise.
-Don't recommend other products to upsell.
+## WARNINGS
+- Make your response short and concise.
+- Don't recommend other products to upsell.
+- Don't use markdown in your response at all.
 
 - Sign as "Best regards, The New York Marketing Team"
 `,
@@ -313,8 +307,6 @@ First, acknowledge their purchase order and give them the necessary information.
 
 Then upsell them.
 
-Make your response short and concise.
-
 UPSELL GUIDELINES:
 - Analyze their purchase/inquiry for complementary needs
 - Suggest 2-4 genuinely useful complementary products
@@ -323,7 +315,12 @@ UPSELL GUIDELINES:
 - Be helpful, not pushy - focus on customer value
 - Explain WHY each product is recommended
 - Include pricing and model numbers
-- Sign as "Best regards, The New York Marketing Team"`,
+- Sign as "Best regards, The New York Marketing Team"
+
+## WARNINGS
+- Make your response short and concise.
+- Don't use markdown in your response at all.
+`,
       tools: [
         {
           type: "file_search",
