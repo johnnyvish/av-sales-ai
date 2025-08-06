@@ -11,8 +11,6 @@ import {
 } from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
-import fs from "fs";
-import path from "path";
 
 // Type definitions
 interface User {
@@ -24,13 +22,6 @@ interface User {
 }
 
 type EmailData = gmail_v1.Schema$Message;
-
-// Load product catalog
-const getProductCatalog = () => {
-  const catalogPath = path.join(process.cwd(), "data/av_products.csv");
-  const catalogData = fs.readFileSync(catalogPath, "utf8");
-  return catalogData;
-};
 
 export async function POST(request: Request) {
   try {
@@ -162,13 +153,8 @@ async function processEmail(
       console.log(
         "Email identified as purchase order by AI - generating upsell"
       );
-      const productCatalog = getProductCatalog();
 
-      const upsellResponse = await generateUpsellResponse(
-        emailBody,
-        subject,
-        productCatalog
-      );
+      const upsellResponse = await generateUpsellResponse(emailBody, subject);
 
       if (upsellResponse) {
         await sendReply(gmail, email.data, upsellResponse);
@@ -177,13 +163,8 @@ async function processEmail(
       }
     } else if (emailType === "product_inquiry") {
       console.log("Email identified as product inquiry by AI");
-      const productCatalog = getProductCatalog();
 
-      const aiResponse = await generateEmailResponse(
-        emailBody,
-        subject,
-        productCatalog
-      );
+      const aiResponse = await generateEmailResponse(emailBody, subject);
 
       if (aiResponse) {
         await sendReply(gmail, email.data, aiResponse);
