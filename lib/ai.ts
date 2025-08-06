@@ -313,6 +313,8 @@ First, acknowledge their purchase order and give them the necessary information.
 
 Then upsell them.
 
+Make your response short and concise.
+
 UPSELL GUIDELINES:
 - Analyze their purchase/inquiry for complementary needs
 - Suggest 2-4 genuinely useful complementary products
