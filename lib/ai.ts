@@ -51,7 +51,6 @@ SEARCH IS SIMPLE:
 - Include model codes: "AC-MV-41 multiviewer"
 - Add constraints: "hdmi extender under 500 dollars"
 
-That's it. No weird syntax. No exact matching nonsense. 
 The search is fuzzy and will find relevant stuff.
 
 AVAILABLE_CATEGORIES: accessories, audio, compact amplifier, distribution amp,
@@ -88,8 +87,7 @@ INQUIRY MODE - Search for products matching their specific requests and question
 }
 
 PRICE LANDSCAPE
-• Products range from $4 to $17 000 (median ≈$475). Use price filters if the
-  customer provides a budget.
+• Products range from $4 to $17 000 (median ≈$475).
 
 You will iteratively propose a search query, explain your reasoning, predict
 completion, and grade your confidence (1-10).
@@ -97,7 +95,7 @@ completion, and grade your confidence (1-10).
 Respond only in JSON:
 { "searchQuery": "...", "reasoning": "...", "isDone": false, "confidence": 7 }
 
-Your vector store is available to you as well, which includes the entire product catalog.
+Your vector store is available to you as well, which includes the entire product catalog. Don't be afraid to use it.
 `,
         tools: [
           {
@@ -239,39 +237,42 @@ export async function generateResponse(
       );
     }
 
-    const response = await openai.chat.completions.create({
+    const response = await openai.responses.create({
       model: "gpt-4.1-2025-04-14",
-      messages: [
-        {
-          role: "system",
-          content: `          
+      instructions: `          
 You are an expert AV equipment sales assistant. Respond professionally to customer inquiries about audio/video equipment.
 
 ${
   searchResult.totalFound > 0
     ? `
-RELEVANT PRODUCTS FROM CATALOG:
+RELEVANT PRODUCTS FROM SEARCH AGENT:
 ${JSON.stringify(searchResult.products.slice(0, 30), null, 2)}
 `
     : `
-No specific products found in catalog for this inquiry. Provide general helpful guidance about AV equipment.
+No specific products found by search agent for this inquiry. Use your vector store access to find relevant products.
 `
 }
 
+You also have access to the complete product catalog through your vector store. Use it to find additional relevant products that match the customer's inquiry.
+
+Make your response short and concise.
+Don't recommend other products to upsell.
+
 - Sign as "Best regards, The New York Marketing Team"
 `,
-        },
+      tools: [
         {
-          role: "user",
-          content: `Customer Email Subject: ${subject}
+          type: "file_search",
+          vector_store_ids: ["vs_689305fcf35c8191a3f7ad8143faf180"],
+        },
+      ],
+      input: `Customer Email Subject: ${subject}
 
 Customer Email:
 ${emailBody}`,
-        },
-      ],
     });
 
-    return response.choices[0].message.content;
+    return response.output_text;
   } catch (error) {
     console.error("AI response generation error:", error);
     return null;
@@ -291,23 +292,22 @@ export async function generateUpsellResponse(
 
     console.log(`Upsell search found ${searchResult.totalFound} products`);
 
-    const response = await openai.chat.completions.create({
+    const response = await openai.responses.create({
       model: "o3-2025-04-16",
-      messages: [
-        {
-          role: "system",
-          content: `You are an expert AV equipment sales assistant specializing in complementary product recommendations and upsells.
+      instructions: `You are an expert AV equipment sales assistant specializing in complementary product recommendations and upsells.
 
 ${
   searchResult.totalFound > 0
     ? `
-AVAILABLE PRODUCTS FOR RECOMMENDATIONS:
+AVAILABLE PRODUCTS FROM SEARCH AGENT:
 ${JSON.stringify(searchResult.products.slice(0, 25), null, 2)}
 
-Products found: ${searchResult.totalFound}
+Products found by search agent: ${searchResult.totalFound}
 `
-    : "Limited product data available - focus on general complementary recommendations."
+    : "Limited product data from search agent - use your vector store access to find complementary products."
 }
+
+You also have access to the complete product catalog through your vector store. Use it to find additional complementary products that would enhance the customer's purchase or solve related problems.
 
 First, acknowledge their purchase order and give them the necessary information.
 
@@ -322,18 +322,19 @@ UPSELL GUIDELINES:
 - Explain WHY each product is recommended
 - Include pricing and model numbers
 - Sign as "Best regards, The New York Marketing Team"`,
-        },
+      tools: [
         {
-          role: "user",
-          content: `Customer Purchase/Inquiry Subject: ${subject}
+          type: "file_search",
+          vector_store_ids: ["vs_689305fcf35c8191a3f7ad8143faf180"],
+        },
+      ],
+      input: `Customer Purchase/Inquiry Subject: ${subject}
 
 Customer Email/Order:
 ${emailBody}`,
-        },
-      ],
     });
 
-    return response.choices[0].message.content;
+    return response.output_text;
   } catch (error) {
     console.error("AI upsell generation error:", error);
     return null;
