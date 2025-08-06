@@ -4,7 +4,7 @@ import {
   isEmailProcessed,
   markEmailAsProcessed,
 } from "@/lib/db";
-import { generateResponse, shouldRespondToEmail } from "@/lib/ai";
+import { generateResponse, classifyEmail } from "@/lib/ai";
 import { google } from "googleapis";
 import { gmail_v1 } from "googleapis/build/src/apis/gmail/v1";
 
@@ -178,13 +178,13 @@ async function processEmail(
       return;
     }
 
-    // Check if we should respond to this email
-    const shouldRespond = await shouldRespondToEmail(emailBody, subject);
+    // Classify the email type
+    const emailType = await classifyEmail(emailBody, subject);
 
-    if (shouldRespond) {
-      console.log("Email identified as AV-related - generating response");
+    if (emailType !== "other") {
+      console.log(`Email classified as ${emailType} - generating response`);
 
-      const aiResponse = await generateResponse(emailBody, subject);
+      const aiResponse = await generateResponse(emailBody, subject, emailType);
 
       if (aiResponse) {
         await sendReply(gmail, email.data, aiResponse);
@@ -192,7 +192,7 @@ async function processEmail(
         console.log("Email processed and reply sent successfully");
       }
     } else {
-      console.log("Email not identified as AV-related, skipping");
+      console.log("Email classified as other, skipping");
       await markEmailAsProcessed(messageId, user.id);
     }
   } catch (error) {
